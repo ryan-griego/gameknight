@@ -30,8 +30,6 @@ app.get('/api/products', (req, res, next) => {
 
 });
 
-// end
-
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));
 });
