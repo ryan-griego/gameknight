@@ -16,7 +16,7 @@ export default class ProductList extends React.Component {
       .then(response => response.json())
       .then(data => this.setState({ products: data }))
       .catch(error => {
-        console.lerror('There was a problem with your fetch GET operation: ', error);
+        console.error('There was a problem with your fetch GET operation: ', error);
       });
   }
 
@@ -25,19 +25,21 @@ export default class ProductList extends React.Component {
   }
 
   render() {
-
-
     return (
-      <ul>
-        {
-          this.state.products.map(product => {
-            return <ProductListItem key={product.id} product={product} />;
-          })
-        }
-      </ul>
+
+      <div className="container">
+        <div className="row row-cols-1 row-cols-md-2 mt-5">
+          <div className="card-deck">
+            {
+              this.state.products.map(product => {
+                return <ProductListItem key={product.id} product={product} name={product.name}/>;
+              })
+            }
+          </div>
+        </div>
+      </div>
+
     );
-
-
 
   }
 }

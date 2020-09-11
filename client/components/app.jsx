@@ -1,6 +1,5 @@
 import React from 'react';
 import Header from './header';
-import ProductListItem from './product-list-item';
 import ProductList from './product-list';
 
 export default class App extends React.Component {
@@ -24,6 +23,6 @@ export default class App extends React.Component {
 
     return this.state.isLoading
       ? <h1>Testing connections...</h1>
-      : <><Header /><ProductList /></>;
+      : <><Header /><ProductList/></>;
   }
 }
