@@ -19,13 +19,29 @@ app.get('/api/health-check', (req, res, next) => {
     .catch(err => next(err));
 });
 
-const viewAllProducts = `
+app.get('/api/products', (req, res, next) => {
+  const viewAllProducts = `
    SELECT "productId", "name", "price", "image", "shortDescription"
      from "products"
   `;
-app.get('/api/products', (req, res, next) => {
   db.query(viewAllProducts)
     .then(result => res.json(result.rows))
+    .catch(err => next(err));
+
+});
+
+// add GET request here
+
+app.get('/api/products/:productId', (req, res, next) => {
+  const { productId } = req.params;
+  const viewSingleProduct = `
+   SELECT "productId", "name", "price", "image", "shortDescription"
+     from "products"
+     where "productId" = $1
+  `;
+  const params = [productId];
+  db.query(viewSingleProduct, params)
+    .then(result => res.json(result.rows[0]))
     .catch(err => next(err));
 
 });
