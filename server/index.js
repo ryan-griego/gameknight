@@ -33,15 +33,15 @@ app.get('/api/products', (req, res, next) => {
 // add GET request here
 
 app.get('/api/products/:productId', (req, res, next) => {
-  const { productId } = req.params;
+  const params = req.params;
+
   const viewSingleProduct = `
-   SELECT "productId", "name", "price", "image", "shortDescription"
+   SELECT *
      from "products"
      where "productId" = $1
   `;
-  const params = [productId];
-  db.query(viewSingleProduct, params)
-    .then(result => res.json(result.rows[0]))
+  db.query(viewSingleProduct)
+    .then(result => res.send(result.rows[0]))
     .catch(err => next(err));
 
 });
