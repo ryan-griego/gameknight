@@ -30,21 +30,30 @@ app.get('/api/products', (req, res, next) => {
 
 });
 
-// add GET request here
 
 app.get('/api/products/:productId', (req, res, next) => {
-  const params = req.params;
-
   const viewSingleProduct = `
    SELECT *
      from "products"
      where "productId" = $1
   `;
-  db.query(viewSingleProduct)
-    .then(result => res.send(result.rows[0]))
-    .catch(err => next(err));
+  const productId = parseInt(req.params.productId);
+  const params = [productId];
+  db.query(viewSingleProduct, params)
+    .then(result => {
+      if (!result.rows[0]) {
+        res.status(404).json({
+        error: `productId: ${productId} cannot be located.`
+      });
+      } else {
+      res.json(result.rows[0]);
+      }})
+    .catch (err => next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404))
+    );
+  })
 
-});
+
+
 
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));
