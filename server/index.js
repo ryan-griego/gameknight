@@ -30,7 +30,6 @@ app.get('/api/products', (req, res, next) => {
 
 });
 
-
 app.get('/api/products/:productId', (req, res, next) => {
   const viewSingleProduct = `
    SELECT *
@@ -43,17 +42,15 @@ app.get('/api/products/:productId', (req, res, next) => {
     .then(result => {
       if (!result.rows[0]) {
         res.status(404).json({
-        error: `productId: ${productId} cannot be located.`
-      });
+          error: `productId: ${productId} cannot be located.`
+        });
       } else {
-      res.json(result.rows[0]);
-      }})
-    .catch (err => next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404))
+        res.json(result.rows[0]);
+      }
+    })
+    .catch(err => next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404))
     );
-  })
-
-
-
+});
 
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));
