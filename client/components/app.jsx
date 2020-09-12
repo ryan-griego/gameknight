@@ -10,6 +10,7 @@ export default class App extends React.Component {
       isLoading: true,
       view: { name: "catalog", params: {} }
     };
+    this.setView.bind = this.setView.bind(this);
   }
 
   setView(name,params) {
@@ -25,9 +26,18 @@ export default class App extends React.Component {
   }
 
   render() {
+    const { view { name, params } } = this.state;
+      return
 
-    return this.state.isLoading
-      ? <h1>Testing connections...</h1>
-      : <><Header /><ProductList/></>;
+         if(this.state.name == "catalog") {
+            <><Header /><ProductDetails view={this.setView}  /></>
+         } else if(this.state.name == "details") {
+           <><Header /><ProductList view={this.setView} /></>
+         }
+
+
+    // return this.state.isLoading
+    //   ? <h1>Testing connections...</h1>
+    //   : <><Header /><ProductList view={this.setView}/></>;
   }
 }
