@@ -29,10 +29,10 @@ export default class App extends React.Component {
     const { view { name, params } } = this.state;
       return
 
-         if(this.state.name == "catalog") {
-            <><Header /><ProductDetails view={this.setView}  /></>
-         } else if(this.state.name == "details") {
-           <><Header /><ProductList view={this.setView} /></>
+         if(this.state.view.name == "catalog") {
+            <><Header /><ProductDetails view={this.setView} /></>
+         } else if(this.state.view.name == "details") {
+           <><Header /><ProductList/></>
          }
 
 

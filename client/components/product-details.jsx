@@ -20,11 +20,7 @@ export default class ProductDetails extends React.Component {
   render() {
     return this.state.product
       ? <h1>Loading product details...</h1>
-      : <><h2>Product details loaded</h2></>;
-
-    return this.state.isLoading
-      ? <h1>Testing connections...</h1>
-      : <><Header /><ProductList /></>;
+      : <><h2>This area should display the product details as displayed on the github link</h2></>;
 
   }
 
