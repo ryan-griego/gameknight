@@ -14,7 +14,10 @@ export default class App extends React.Component {
   }
 
   setView(name,params) {
-    this.setState( {view: { name: name, params: params} } );
+    console.log("You clicked a product");
+    this.setState({
+      view: { name: name, params: params}
+    });
   }
 
   componentDidMount() {
@@ -32,7 +35,7 @@ export default class App extends React.Component {
          if(this.state.view.name == "catalog") {
             <><Header /><ProductDetails view={this.setView} /></>
          } else if(this.state.view.name == "details") {
-           <><Header /><ProductList/></>
+           <><Header /><ProductList view ={this.setView}/></>
          }
 
 
