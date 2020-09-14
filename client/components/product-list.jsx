@@ -32,7 +32,7 @@ export default class ProductList extends React.Component {
           <div className="card-deck">
             {
               this.state.products.map(product => {
-                return <ProductListItem key={product.id} product={product} name={product.name} onClick={this.props.view(product.name, product.productId)}/>;
+                return <ProductListItem key={product.id} product={product} name={product.name} view={this.props.view}/>;
               })
             }
           </div>
