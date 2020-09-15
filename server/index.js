@@ -19,15 +19,37 @@ app.get('/api/health-check', (req, res, next) => {
     .catch(err => next(err));
 });
 
-const viewAllProducts = `
+app.get('/api/products', (req, res, next) => {
+  const viewAllProducts = `
    SELECT "productId", "name", "price", "image", "shortDescription"
      from "products"
   `;
-app.get('/api/products', (req, res, next) => {
   db.query(viewAllProducts)
     .then(result => res.json(result.rows))
     .catch(err => next(err));
 
+});
+
+app.get('/api/products/:productId', (req, res, next) => {
+  const viewSingleProduct = `
+   SELECT *
+     from "products"
+     where "productId" = $1
+  `;
+  const productId = parseInt(req.params.productId);
+  const params = [productId];
+  db.query(viewSingleProduct, params)
+    .then(result => {
+      if (!result.rows[0]) {
+        res.status(404).json({
+          error: `productId: ${productId} cannot be located.`
+        });
+      } else {
+        res.json(result.rows[0]);
+      }
+    })
+    .catch(err => next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404))
+    );
 });
 
 app.use('/api', (req, res, next) => {

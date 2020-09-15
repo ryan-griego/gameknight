@@ -7,8 +7,8 @@ export default class ProductList extends React.Component {
     super(props);
     this.state = {
       products: []
-
     };
+    this.setView = this.setView.bind(this);
   }
 
   getProducts() {
@@ -24,22 +24,30 @@ export default class ProductList extends React.Component {
     this.getProducts();
   }
 
+  setView(e) {
+    const productId = e.currentTarget.getAttribute('id');
+    this.props.view('details', { productId });
+  }
+
   render() {
     return (
-
       <div className="container">
         <div className="row row-cols-1 row-cols-md-2 mt-5">
           <div className="card-deck">
             {
               this.state.products.map(product => {
-                return <ProductListItem key={product.id} product={product} name={product.name}/>;
+                return <ProductListItem
+                  key={product.productId}
+                  product={product}
+                  name={product.name}
+                  productId={product.productId}
+                  price={product.price}
+                  view={this.setView}/>;
               })
             }
           </div>
         </div>
       </div>
-
     );
-
   }
 }
