@@ -6,10 +6,11 @@ export default class ProductDetails extends React.Component {
     this.state = {
       product: null
     };
+    this.setView = this.setView.bind(this);
   }
 
   componentDidMount() {
-    fetch('/api/products/1')
+    fetch(`/api/products/${this.props.viewParams.productId}`)
       .then(response => response.json())
       .then(data => this.setState({ product: data }))
       .catch(error => {
@@ -17,11 +18,35 @@ export default class ProductDetails extends React.Component {
       });
   }
 
-  render() {
-    return this.state.product
-      ? <h1>Loading product details...</h1>
-      : <><h2>This area should display the product details as displayed on the github link</h2></>;
-
+  setView(e) {
+    this.props.view('catalog', {});
   }
 
+  render() {
+    if (!this.state.product) return null;
+    return (
+      <div className="container">
+        <div className="hover text-muted my-3 px-0 btn d-flex justify-content-start" onClick={this.setView} style={{ cursor: 'pointer' }}>&lt; Back to catalog</div>
+
+        <div className="row">
+          <div className="col-4">
+            <img src={this.state.product.image}/>
+          </div>
+
+          <div className="col-8">
+            <h1>{this.state.product.name}</h1>
+            <h2>{this.state.product.price}</h2>
+            <p>{this.state.product.shortDescription}</p>
+          </div>
+
+        </div>
+
+        <div className="row">
+          <p>{this.state.product.longDescription}</p>
+
+        </div>
+      </div>
+    );
+
+  }
 }

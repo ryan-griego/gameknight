@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from './header';
 import ProductList from './product-list';
+import ProductDetails from './product-details';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -8,21 +9,21 @@ export default class App extends React.Component {
     this.state = {
       message: null,
       isLoading: true,
-      view: { name: "catalog", params: {} }
+      view: {
+        name: 'catalog',
+        params: {}
+      }
     };
     this.setView = this.setView.bind(this);
   }
 
-  setView(name,params) {
-
+  setView(name, params) {
     this.setState({
-      view: { name: "details", params: {productId: 2}}
+      view: {
+        name: name,
+        params
+      }
     });
-
-    console.log("You clicked a product");
-    console.log("Log the state of view.name", this.state.view.name);
-    console.log("Log the state of view.params", this.state.view.params);
-
   }
 
   componentDidMount() {
@@ -34,21 +35,20 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { params } = this.state.view;
-    const name = this.state.view.name;
+    const viewType = this.state.view.name;
 
-    // console.log("log the params", name);
-      // return
-
-        //  if(this.state.view.name == "catalog") {
-        //     <><Header /><ProductDetails view={this.setView} /></>
-        //  } else if(this.state.view.name == "details") {
-        //    <><Header /><ProductList view={this.setView} params={this.state.view.params}/></>
-        //  }
-
-
-    return this.state.isLoading
-      ? <h1>Testing connections...</h1>
-      : <><Header /><ProductList view={this.setView}/></>;
+    if (viewType === 'catalog') {
+      return (
+        <><Header view={this.setView}/><ProductList view={this.setView} /></>
+      );
+    } else if (viewType === 'details') {
+      return (
+        <div>
+          <Header view={this.setView}/>
+          <ProductDetails product={this.props.product}
+            view={this.setView} viewParams={this.state.view.params} />
+        </div>
+      );
+    }
   }
 }
