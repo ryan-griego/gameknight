@@ -25,7 +25,7 @@ export default class ProductList extends React.Component {
   }
 
   setView(e) {
-    const productId = Number(e.currentTarget.getAttribute('id'));
+    const productId = e.currentTarget.getAttribute('id');
     this.props.view('details', { productId });
   }
 
@@ -36,7 +36,13 @@ export default class ProductList extends React.Component {
           <div className="card-deck">
             {
               this.state.products.map(product => {
-                return <ProductListItem key={product.productId} product={product} name={product.name} productId={product.productId} view={this.setView}/>;
+                return <ProductListItem
+                  key={product.productId}
+                  product={product}
+                  name={product.name}
+                  productId={product.productId}
+                  price={product.price}
+                  view={this.setView}/>;
               })
             }
           </div>

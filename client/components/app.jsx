@@ -39,14 +39,19 @@ export default class App extends React.Component {
 
     if (viewType === 'catalog') {
       return (
-        <><Header view={this.setView}/><ProductList view={this.setView} /></>
+        <div>
+          <Header/>
+          <ProductList view={this.setView} />
+        </div>
       );
     } else if (viewType === 'details') {
       return (
         <div>
-          <Header view={this.setView}/>
-          <ProductDetails product={this.props.product}
-            view={this.setView} viewParams={this.state.view.params} />
+          <Header/>
+          <ProductDetails
+            product={this.props.product}
+            view={this.setView}
+            viewParams={this.state.view.params} />
         </div>
       );
     }
