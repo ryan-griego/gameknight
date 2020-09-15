@@ -52,6 +52,29 @@ app.get('/api/products/:productId', (req, res, next) => {
     );
 });
 
+// Add an initial GET endpoint for /api/cart
+
+app.get('/api/cart', (req, res, next) => {
+  const viewAllCarts = `
+    SELECT *
+      from "carts"
+  `;
+  db.query(viewAllCarts)
+    .then(result => res.json(result.rows))
+    .catch(err => next(err));
+});
+
+
+
+
+
+// Add a POST endpoint for /api/cart
+
+app.post('/api/grades', function (req, res) {
+
+
+})
+
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));
 });
