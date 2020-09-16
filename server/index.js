@@ -55,25 +55,79 @@ app.get('/api/products/:productId', (req, res, next) => {
 // Add an initial GET endpoint for /api/cart
 
 app.get('/api/cart', (req, res, next) => {
-  const viewAllCarts = `
-    SELECT *
-      from "carts"
-  `;
-  db.query(viewAllCarts)
+  // const viewAllCarts = `
+  //   SELECT *
+  //     from "carts"
+  // `;
+  db.query()
     .then(result => res.json(result.rows))
     .catch(err => next(err));
 });
 
 
+// END GET
 
 
 
 // Add a POST endpoint for /api/cart
 
-app.post('/api/grades', function (req, res) {
+app.post('/api/cart/', function (req, res) => {
+  const checkPrice = `
+    SELECT "price"
+    from "cartItems"
+    where "productId" = $1
+    returning *;
+  `;
+  console.log("Log the req.body", req.body);
+  const { productId } = req.body;
+  if(parseInt(productId, 10) < 0) {
+    return res.status(400).json({
+      error: 'ProductId must be a positive integer.'
+    });
+  }
+
+  const values = [price, productId];
+db.query(checkPrice, values)
+    .then(result => {
+        const addNewCart = `
+          INSERT INTO "carts" ("cartId", "createdAt")
+          VALUES (default, default)
+          returning "cartId"
+        `;
+        const product = result.rows[0];
+        if (!product) {
+          throw new ClientError(`cannot ${req.method} ${req.originalUrl} - There are no rows in the query result`, 400)
+        }
+        return addNewCart;
+        // res.status(201).send(grade);
+    })
+    .then(result => {
+      const product = result.rows[0];
+      res.status(201).send(grade);
+    })
+    .then(result => {
+      const product = result.rows[0];
+      res.status(201).send(grade);
+    })
+      .catch(err => {
+        console.error(err);
+        res.status(500).json({
+          error: 'An unexpected error occured.'
+        });
+      });
+  });
 
 
-})
+// const postProduct = `
+//     insert into "cartItems" ("price","productId")
+//     values ($1, $2)
+//     where "productId" = $1
+//     returning *;
+//   `;
+
+
+
+// end POST
 
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));
