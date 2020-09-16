@@ -48,84 +48,89 @@ app.get('/api/products/:productId', (req, res, next) => {
         res.json(result.rows[0]);
       }
     })
-    .catch(err => next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404))
-    );
+    .catch(err => next(err));
 });
 
 // Add an initial GET endpoint for /api/cart
 
 app.get('/api/cart', (req, res, next) => {
-  // const viewAllCarts = `
-  //   SELECT *
-  //     from "carts"
-  // `;
+
   db.query()
-    .then(result => res.json(result.rows))
+    .then(result => res.json([]))
     .catch(err => next(err));
 });
 
-
 // END GET
 
-
-
-// Add a POST endpoint for /api/cart
-
-app.post('/api/cart/', function (req, res) => {
-  const checkPrice = `
-    SELECT "price"
-    from "cartItems"
-    where "productId" = $1
-    returning *;
-  `;
-  console.log("Log the req.body", req.body);
+app.post('/api/cart/', (req, res, next) => {
   const { productId } = req.body;
-  if(parseInt(productId, 10) < 0) {
-    return res.status(400).json({
-      error: 'ProductId must be a positive integer.'
-    });
+
+  if (parseInt(productId) < 0) {
+    return next(new ClientError(`${productId} is not a valid Product ID`, 400));
   }
 
-  const values = [price, productId];
-db.query(checkPrice, values)
+  const checkPrice = `
+  SELECT "price"
+  FROM "products"
+  WHERE "productId" = $1
+`;
+
+  const value = [productId];
+
+  db.query(checkPrice, value)
     .then(result => {
-        const addNewCart = `
+
+      if (!result.rows[0]) {
+        throw new ClientError(`productId ${productId} does not exist`, 400);
+      } else if ('cartId' in req.session) {
+        return {
+          price: result.rows[0].price,
+          cartId: req.session.cartId
+        };
+      }
+      const addCartId = `
           INSERT INTO "carts" ("cartId", "createdAt")
           VALUES (default, default)
-          returning "cartId"
+          RETURNING "cartId"
         `;
-        const product = result.rows[0];
-        if (!product) {
-          throw new ClientError(`cannot ${req.method} ${req.originalUrl} - There are no rows in the query result`, 400)
-        }
-        return addNewCart;
-        // res.status(201).send(grade);
+      return db.query(addCartId).then(cartId => ({
+        price: result.rows[0].price,
+        cartId: cartId.rows[0].cartId
+      }));
     })
-    .then(result => {
-      const product = result.rows[0];
-      res.status(201).send(grade);
+    .then(data => {
+      req.session.cartId = data.cartId;
+      const price = data.price;
+      const addItemToCart = `
+        INSERT INTO "cartItems" ("cartId", "productId", "price")
+        VALUES ($1, $2, $3)
+        RETURNING "cartItemId"
+      `;
+      const values = [data.cartId, productId, price];
+      return db.query(addItemToCart, values).then(cartItemId => ({
+        cartItemId: cartItemId.rows[0]
+      }));
     })
-    .then(result => {
-      const product = result.rows[0];
-      res.status(201).send(grade);
-    })
-      .catch(err => {
-        console.error(err);
-        res.status(500).json({
-          error: 'An unexpected error occured.'
+    .then(cartItemId => {
+      const selectAllCartItems = `
+      SELECT "c"."cartItemId",
+        "c"."price",
+        "p"."productId",
+        "p"."image",
+        "p"."name",
+        "p"."shortDescription"
+      FROM "cartItems" as "c"
+      JOIN "products" as "p" using ("productId")
+      WHERE "c"."cartItemId" = $1
+      `;
+      const value = [cartItemId.cartItemId];
+      return db.query(selectAllCartItems, value)
+        .then(data => {
+          res.status(201).json(data.rows);
         });
-      });
-  });
-
-
-// const postProduct = `
-//     insert into "cartItems" ("price","productId")
-//     values ($1, $2)
-//     where "productId" = $1
-//     returning *;
-//   `;
-
-
+    })
+    .catch(err => next(err));
+});
 
 // end POST
 
