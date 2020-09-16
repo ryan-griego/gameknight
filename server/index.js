@@ -47,8 +47,7 @@ app.get('/api/products/:productId', (req, res, next) => {
       } else {
         res.json(result.rows[0]);
       }
-    })
-    .catch(err => next(err));
+    }).catch(err => next(err));
 });
 
 // Add an initial GET endpoint for /api/cart
