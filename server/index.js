@@ -50,16 +50,28 @@ app.get('/api/products/:productId', (req, res, next) => {
     }).catch(err => next(err));
 });
 
-// Add an initial GET endpoint for /api/cart
-
 app.get('/api/cart', (req, res, next) => {
+  const checkCartId = `
+  SELECT "c"."cartItemId",
+         "c"."price",
+         "p"."productId",
+         "p"."image",
+         "p"."name",
+         "p"."shortDescription"
+    FROM "cartItems" as "c"
+    JOIN "products" as "p" using ("productId")
+  WHERE "c".cartId" = $1
+  `;
+  if (!req.session.cartId) return res.json([]);
+  const value = [req.session.cartId];
 
-  db.query()
-    .then(result => res.json([]))
+  db.query(checkCartId, value)
+    .then(result => {
+      const data = result.rows;
+      res.status(200).json(data);
+    })
     .catch(err => next(err));
 });
-
-// END GET
 
 app.post('/api/cart/', (req, res, next) => {
   const { productId } = req.body;
