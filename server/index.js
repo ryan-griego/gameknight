@@ -117,10 +117,7 @@ app.post('/api/cart', (req, res, next) => {
         RETURNING "cartItemId"
       `;
       const values = [data.cartId, productId, price];
-      return db.query(addItemToCart, values)
-        .then(cartItemId => {
-          cartItemId = cartItemId.rows[0];
-        });
+      return db.query(addItemToCart, values).then(cartItemId => cartItemId.rows[0]);
     })
     .then(cartItemId => {
       const selectAllCartItems = `
