@@ -52,15 +52,15 @@ app.get('/api/products/:productId', (req, res, next) => {
 
 app.get('/api/cart', (req, res, next) => {
   const checkCartId = `
-  SELECT "c"."cartItemId",
-         "c"."price",
-         "p"."productId",
-         "p"."image",
-         "p"."name",
-         "p"."shortDescription"
-    FROM "cartItems" as "c"
-    JOIN "products" as "p" using ("productId")
-  WHERE "c".cartId" = $1
+select "c"."cartItemId",
+       "c"."price",
+       "p"."productId",
+       "p"."image",
+       "p"."name",
+       "p"."shortDescription"
+  from "cartItems" as "c"
+  join "products" as "p" using ("productId")
+ where "c"."cartId" = $1
   `;
   if (!req.session.cartId) return res.json([]);
   const value = [req.session.cartId];
@@ -73,24 +73,23 @@ app.get('/api/cart', (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.post('/api/cart/', (req, res, next) => {
+app.post('/api/cart', (req, res, next) => {
   const { productId } = req.body;
 
-  if (parseInt(productId) < 0) {
+  if (!Number(productId)) {
     return next(new ClientError(`${productId} is not a valid Product ID`, 400));
   }
 
   const checkPrice = `
   SELECT "price"
-  FROM "products"
-  WHERE "productId" = $1
+  FROM   "products"
+  WHERE  "productId" = $1
 `;
 
   const value = [productId];
 
   db.query(checkPrice, value)
     .then(result => {
-
       if (!result.rows[0]) {
         throw new ClientError(`productId ${productId} does not exist`, 400);
       } else if ('cartId' in req.session) {
@@ -118,21 +117,22 @@ app.post('/api/cart/', (req, res, next) => {
         RETURNING "cartItemId"
       `;
       const values = [data.cartId, productId, price];
-      return db.query(addItemToCart, values).then(cartItemId => ({
-        cartItemId: cartItemId.rows[0]
-      }));
+      return db.query(addItemToCart, values)
+        .then(cartItemId => {
+          cartItemId = cartItemId.rows[0];
+        });
     })
     .then(cartItemId => {
       const selectAllCartItems = `
-      SELECT "c"."cartItemId",
-        "c"."price",
-        "p"."productId",
-        "p"."image",
-        "p"."name",
-        "p"."shortDescription"
-      FROM "cartItems" as "c"
-      JOIN "products" as "p" using ("productId")
-      WHERE "c"."cartItemId" = $1
+  select "c"."cartItemId",
+      "c"."price",
+      "p"."productId",
+      "p"."image",
+      "p"."name",
+      "p"."shortDescription"
+  from "cartItems" as "c"
+  join "products" as "p" using ("productId")
+where "c"."cartItemId" = $1
       `;
       const value = [cartItemId.cartItemId];
       return db.query(selectAllCartItems, value)
@@ -142,8 +142,6 @@ app.post('/api/cart/', (req, res, next) => {
     })
     .catch(err => next(err));
 });
-
-// end POST
 
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));
