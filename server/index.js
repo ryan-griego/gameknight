@@ -22,7 +22,7 @@ app.get('/api/health-check', (req, res, next) => {
 app.get('/api/products', (req, res, next) => {
   const viewAllProducts = `
    SELECT "productId", "name", "price", "image", "shortDescription"
-     from "products"
+     FROM "products"
   `;
   db.query(viewAllProducts)
     .then(result => res.json(result.rows))
@@ -33,8 +33,8 @@ app.get('/api/products', (req, res, next) => {
 app.get('/api/products/:productId', (req, res, next) => {
   const viewSingleProduct = `
    SELECT *
-     from "products"
-     where "productId" = $1
+     FROM "products"
+     WHERE "productId" = $1
   `;
   const productId = parseInt(req.params.productId);
   const params = [productId];
@@ -52,15 +52,15 @@ app.get('/api/products/:productId', (req, res, next) => {
 
 app.get('/api/cart', (req, res, next) => {
   const checkCartId = `
-select "c"."cartItemId",
+SELECT "c"."cartItemId",
        "c"."price",
        "p"."productId",
        "p"."image",
        "p"."name",
        "p"."shortDescription"
-  from "cartItems" as "c"
-  join "products" as "p" using ("productId")
- where "c"."cartId" = $1
+  FROM "cartItems" as "c"
+  JOIN "products" as "p" USING ("productId")
+ WHERE "c"."cartId" = $1
   `;
   if (!req.session.cartId) return res.json([]);
   const value = [req.session.cartId];
@@ -121,15 +121,15 @@ app.post('/api/cart', (req, res, next) => {
     })
     .then(cartItemId => {
       const selectAllCartItems = `
-  select "c"."cartItemId",
+  SELECT "c"."cartItemId",
       "c"."price",
       "p"."productId",
       "p"."image",
       "p"."name",
       "p"."shortDescription"
-  from "cartItems" as "c"
-  join "products" as "p" using ("productId")
-where "c"."cartItemId" = $1
+   FROM "cartItems" AS "c"
+   JOIN "products" AS "p" using ("productId")
+  WHERE "c"."cartItemId" = $1
       `;
       const value = [cartItemId.cartItemId];
       return db.query(selectAllCartItems, value)
