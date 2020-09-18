@@ -2,7 +2,6 @@ import React from 'react';
 import Header from './header';
 import ProductList from './product-list';
 import ProductDetails from './product-details';
-import { response } from 'express';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -38,7 +37,7 @@ export default class App extends React.Component {
       },
       body: JSON.stringify(product)
     })
-      .then(reponse => response.json())
+      .then(response => response.json())
       .then(() => this.getCartItems())
       .catch(error => {
         console.error('Error:', error);
