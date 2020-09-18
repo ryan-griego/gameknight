@@ -35,7 +35,9 @@ export default class App extends React.Component {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(product)
+      body: JSON.parse({
+        product
+      })
     })
       .then(response => response.json())
       .then(() => this.getCartItems())
@@ -75,7 +77,7 @@ export default class App extends React.Component {
     } else if (viewType === 'details') {
       return (
         <div>
-          <Header/>
+          <Header cartItemCount={this.state.cart.length}/>
           <ProductDetails
             product={this.props.product}
             view={this.setView}
