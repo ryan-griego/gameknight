@@ -9,6 +9,7 @@ export default class App extends React.Component {
     this.state = {
       message: null,
       isLoading: true,
+      cart: [],
       view: {
         name: 'catalog',
         params: {}
