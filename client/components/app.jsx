@@ -2,6 +2,7 @@ import React from 'react';
 import Header from './header';
 import ProductList from './product-list';
 import ProductDetails from './product-details';
+import { response } from 'express';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -16,6 +17,15 @@ export default class App extends React.Component {
       }
     };
     this.setView = this.setView.bind(this);
+  }
+
+  getCartItems() {
+    fetch('/api/cart')
+      .then(reponse => response.json())
+      .then(data => this.setState({ cart: data }))
+      .catch(error => {
+        console.error('There was a problem with your fetch operation in getCartItems: ', error);
+      });
   }
 
   setView(name, params) {
@@ -33,6 +43,7 @@ export default class App extends React.Component {
       .then(data => this.setState({ message: data.message || data.error }))
       .catch(err => this.setState({ message: err.message }))
       .finally(() => this.setState({ isLoading: false }));
+    this.getCartItems();
   }
 
   render() {
