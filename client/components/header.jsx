@@ -7,6 +7,7 @@ export default class Header extends React.Component {
         <nav className="navbar navbar-dark bg-dark">
           <div className="container">
             <i className="fas fa-dollar-sign"><h1>Wicked Sales</h1></i>
+            <i className="fas fa-shopping-cart"></i>
           </div>
         </nav>
       </header>
