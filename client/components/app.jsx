@@ -30,14 +30,13 @@ export default class App extends React.Component {
   }
 
   addToCart(product) {
+    product = this.state.view.params;
     fetch('/api/cart', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.parse({
-        product
-      })
+      body: JSON.stringify(product)
     })
       .then(response => response.json())
       .then(() => this.getCartItems())
