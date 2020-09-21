@@ -140,6 +140,56 @@ app.post('/api/cart', (req, res, next) => {
     .catch(err => next(err));
 });
 
+// TO DO:
+// Add an endpoint to your Express.js server to handle POST requests to / api / orders.The endpoint should:
+// Verify that there is a cartId on req.session or respond with a 400 error with a helpful message.
+// Verify that the req.body contains a name, creditCard, and shippingAddress.
+// Insert the cartId, name, creditCard, and shippingAddress into the orders table.
+// delete the cartId from req.session if the insert succeeded.
+// Respond with a 201 status and a JSON body including the orderId, createdAt, name, creditCard, and shippingAddress of the placed order.
+
+// Add /api/orders POST request here
+
+app.post('/api/orders', (req, res, next) => {
+  const cartId = req.session.cartId;
+  const { name, creditCard, shippingAddress } = req.body;
+  const checkBodyValues = [name, creditCard, shippingAddress];
+  const values = [cartId, name, creditCard, shippingAddress];
+
+  if (!cartId) {
+    throw new ClientError('There is no cartId in req.session', 400);
+  }
+  if (checkBodyValues in req.body) {
+    throw new ClientError('The request needs to contain a name, credit card, and shipping address', 400);
+  }
+  const addNewOrder = `
+    INSERT INTO "orders" ("cartId", "name", "creditCard", "shippingAddress")
+    VALUES (1$, $2, $3, $4)
+    RETURNING "cartId"
+  `;
+  return db.query(addNewOrder, values).then(cartId =>
+    cartId.destroy()).then(cartId => {
+    const selectPlacedOrderItems = `
+      SELECT "orderId",
+             "createdAt",
+             "name",
+             "creditCard",
+             "shippingAddress"
+      FROM "orders"
+      WHERE "cartId" = $1
+    `;
+    const value = [cartId.cartId];
+    return db.query(selectPlacedOrderItems, value)
+      .then(data => {
+        res.status(201).json(data.rows);
+      });
+  })
+    .catch(err => next(err));
+
+});
+
+// End POST request here
+
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));
 });
