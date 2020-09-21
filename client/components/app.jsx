@@ -2,6 +2,7 @@ import React from 'react';
 import Header from './header';
 import ProductList from './product-list';
 import ProductDetails from './product-details';
+import CartSummary from './CartSummary';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -26,7 +27,6 @@ export default class App extends React.Component {
       .catch(error => {
         console.error('There was a problem with your fetch operation in getCartItems: ', error);
       });
-
   }
 
   addToCart(product) {
@@ -65,23 +65,44 @@ export default class App extends React.Component {
 
   render() {
     const viewType = this.state.view.name;
+    const allPrices = this.state.cart.map(item => item.price);
+    const totalPrice = allPrices.reduce((a, b) => a + b, 0);
 
     if (viewType === 'catalog') {
       return (
         <div>
-          <Header cartItemCount={this.state.cart.length}/>
+          <Header
+            cartItemCount={this.state.cart.length}
+            view={this.setView}/>
           <ProductList view={this.setView} />
         </div>
       );
     } else if (viewType === 'details') {
       return (
         <div>
-          <Header cartItemCount={this.state.cart.length}/>
+          <Header
+            cartItemCount={this.state.cart.length}
+            view={this.setView}/>
           <ProductDetails
             product={this.props.product}
             view={this.setView}
             viewParams={this.state.view.params}
             add={this.addToCart} />
+        </div>
+      );
+    } else if (viewType === 'cart') {
+      return (
+        <div>
+          <Header
+            cartItemCount={this.state.cart.length}
+            view={this.setView} />
+          <CartSummary
+            product={this.props.product}
+            cartItemCount={this.state.cart.length}
+            view={this.setView}
+            cart={this.state.cart}
+            viewParams={this.state.view.params}
+            totalCost={totalPrice}/>
         </div>
       );
     }
