@@ -154,7 +154,7 @@ app.post('/api/orders', (req, res, next) => {
   const cartId = req.session.cartId;
   const { name, creditCard, shippingAddress } = req.body;
   const checkBodyValues = [name, creditCard, shippingAddress];
-  const values = [cartId, name, creditCard, shippingAddress];
+  const values = [req.session.cartId, name, creditCard, shippingAddress];
 
   if (!cartId) {
     throw new ClientError('There is no cartId in req.session', 400);
