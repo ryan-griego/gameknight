@@ -148,6 +148,9 @@ app.post('/api/cart', (req, res, next) => {
 // delete the cartId from req.session if the insert succeeded.
 // Respond with a 201 status and a JSON body including the orderId, createdAt, name, creditCard, and shippingAddress of the placed order.
 
+// TIPS
+// see pg.64 EJ book for delete, object.keys (value in object) explanations
+
 // Add /api/orders POST request here
 
 app.post('/api/orders', (req, res, next) => {
