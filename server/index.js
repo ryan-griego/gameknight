@@ -168,12 +168,13 @@ app.post('/api/orders', (req, res, next) => {
     });
   }
 
+  const cartId = req.session.cartId;
   const addNewOrder = `
     INSERT INTO "orders" ("cartId", "name", "creditCard", "shippingAddress"),
     VALUES ($1, $2, $3, $4)
     RETURNING *;
   `;
-  const values = [req.session.cartId, name, creditCard, shippingAddress];
+  const values = [cartId, name, creditCard, shippingAddress];
 
   db.query(addNewOrder, values)
     .then(result => {
