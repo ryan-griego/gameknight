@@ -169,8 +169,8 @@ app.post('/api/orders', (req, res, next) => {
   }
 
   const addNewOrder = `
-    INSERT INTO "orders" ("cartId", "name", "creditCard", "shippingAddress")
-    VALUES (default, $2, $3, $4)
+    INSERT INTO "orders" ("cartId", "name", "creditCard", "shippingAddress"),
+    VALUES ($1, $2, $3, $4)
     RETURNING *;
   `;
   const values = [req.session.cartId, name, creditCard, shippingAddress];
