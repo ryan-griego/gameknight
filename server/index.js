@@ -149,41 +149,38 @@ app.post('/api/cart', (req, res, next) => {
 // Respond with a 201 status and a JSON body including the orderId, createdAt, name, creditCard, and shippingAddress of the placed order.
 
 // TIPS
-// see pg.64 EJ book for delete, object.keys (value in object) explanations
+// see pg.64 EJ book for delete, object.keys (value in object)
 
 // Add /api/orders POST request here
 
 app.post('/api/orders', (req, res, next) => {
-  // const cartId = req.session.cartId;
-  const { name, creditCard, shippingAddress } = req.body;
-  const checkBodyValues = [name, creditCard, shippingAddress];
-  const values = [req.session.cartId, name, creditCard, shippingAddress];
 
-  if (checkBodyValues in req.body) {
-    throw new ClientError('The request needs to contain a name, credit card, and shipping address', 400);
+  // if(typeof req.session.cartId !== 'number') {
+  //   return res.status(400).json({
+  //     error: 'There is no cartId in req.session'
+  //   });
+  // }
+
+  const { name, creditCard, shippingAddress } = req.body;
+
+  if (!name || !creditCard || !shippingAddress) {
+    return res.status(400).json({
+      error: 'The request needs to contain a name, credit card number and shipping address.'
+    });
   }
+
   const addNewOrder = `
     INSERT INTO "orders" ("cartId", "name", "creditCard", "shippingAddress")
     VALUES (1$, $2, $3, $4)
-    RETURNING "cartId"
+    RETURNING *
   `;
-  return db.query(addNewOrder, values).then(cartId =>
-    cartId.destroy()).then(cartId => {
-    const selectPlacedOrderItems = `
-      SELECT "orderId",
-             "createdAt",
-             "name",
-             "creditCard",
-             "shippingAddress"
-      FROM "orders"
-      WHERE "cartId" = $1
-    `;
-    const value = [cartId.cartId];
-    return db.query(selectPlacedOrderItems, value)
-      .then(data => {
-        res.status(201).json(data.rows);
-      });
-  })
+  const values = [req.session.cartId, name, creditCard, shippingAddress];
+
+  db.query(addNewOrder, values)
+    .then(result => {
+      delete req.session.cartId;
+      res.status(201).json(result.rows[0]);
+    })
     .catch(err => next(err));
 
 });
