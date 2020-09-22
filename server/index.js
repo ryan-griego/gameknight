@@ -154,14 +154,14 @@ app.post('/api/cart', (req, res, next) => {
 // Add /api/orders POST request here
 
 app.post('/api/orders', (req, res, next) => {
-  const cartId = req.session.cartId;
+  // const cartId = req.session.cartId;
   const { name, creditCard, shippingAddress } = req.body;
   const checkBodyValues = [name, creditCard, shippingAddress];
   const values = [req.session.cartId, name, creditCard, shippingAddress];
 
-  if (!cartId) {
-    throw new ClientError('There is no cartId in req.session', 400);
-  }
+  // if (!cartId) {
+  //   throw new ClientError('There is no cartId in req.session', 400);
+  // }
   if (checkBodyValues in req.body) {
     throw new ClientError('The request needs to contain a name, credit card, and shipping address', 400);
   }
