@@ -154,7 +154,6 @@ app.post('/api/cart', (req, res, next) => {
 // Add /api/orders POST request here
 
 app.post('/api/orders', (req, res, next) => {
-
   if (typeof req.session.cartId !== 'number') {
     return res.status(400).json({
       error: 'There is no cartId in req.session'
@@ -171,8 +170,8 @@ app.post('/api/orders', (req, res, next) => {
 
   const addNewOrder = `
     INSERT INTO "orders" ("cartId", "name", "creditCard", "shippingAddress")
-    VALUES (1$, $2, $3, $4)
-    RETURNING *
+    VALUES ($1, $2, $3, $4)
+    RETURNING *;
   `;
   const values = [req.session.cartId, name, creditCard, shippingAddress];
 
