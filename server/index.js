@@ -180,8 +180,13 @@ app.post('/api/orders', (req, res, next) => {
       delete req.session.cartId;
       res.status(201).json(result.rows[0]);
     })
-    .catch(err => next(err));
-
+    .catch(err => {
+      if (err.code === '42601') {
+        // return the position of the SQL syntax error
+        console.error('SQL syntax error position:', err.position);
+      }
+      next(err);
+    });
 });
 
 // End POST request here
