@@ -155,11 +155,11 @@ app.post('/api/cart', (req, res, next) => {
 
 app.post('/api/orders', (req, res, next) => {
 
-  // if(typeof req.session.cartId !== 'number') {
-  //   return res.status(400).json({
-  //     error: 'There is no cartId in req.session'
-  //   });
-  // }
+  if (typeof req.session.cartId !== 'number') {
+    return res.status(400).json({
+      error: 'There is no cartId in req.session'
+    });
+  }
 
   const { name, creditCard, shippingAddress } = req.body;
 
