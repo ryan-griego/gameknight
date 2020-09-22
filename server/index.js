@@ -168,14 +168,14 @@ app.post('/api/orders', (req, res, next) => {
     });
   }
 
-  const sql = `
-    insert into "orders" ("cartId", "name", "creditCard", "shippingAddress")
-          values ($1, $2, $3, $4)
-          returning *;
+  const addNewOrder = `
+    INSERT INTO "orders" ("cartId", "name", "creditCard", "shippingAddress")
+    VALUES (default, $2, $3, $4)
+    RETURNING *;
   `;
   const values = [req.session.cartId, name, creditCard, shippingAddress];
 
-  db.query(sql, values)
+  db.query(addNewOrder, values)
     .then(result => {
       delete req.session.cartId;
       res.status(201).json(result.rows[0]);
