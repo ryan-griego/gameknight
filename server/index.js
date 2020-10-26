@@ -148,9 +148,6 @@ app.post('/api/cart', (req, res, next) => {
 // delete the cartId from req.session if the insert succeeded.
 // Respond with a 201 status and a JSON body including the orderId, createdAt, name, creditCard, and shippingAddress of the placed order.
 
-// TIPS
-// see pg.64 EJ book for delete, object.keys (value in object)
-
 // Add /api/orders POST request here
 
 app.post('/api/orders', (req, res, next) => {
@@ -168,13 +165,12 @@ app.post('/api/orders', (req, res, next) => {
     });
   }
 
-  const cartId = req.session.cartId;
   const addNewOrder = `
-    INSERT INTO "orders" (${cartId}, "name", "creditCard", "shippingAddress"),
-    VALUES ($1, $2, $3, $4)
+    INSERT INTO "orders" ("name", "creditCard", "shippingAddress")
+    VALUES ($1, $2, $3)
     RETURNING *;
   `;
-  const values = [cartId, name, creditCard, shippingAddress];
+  const values = [req.session.cartId, name, creditCard, shippingAddress];
 
   db.query(addNewOrder, values)
     .then(result => {
