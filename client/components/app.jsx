@@ -19,6 +19,35 @@ export default class App extends React.Component {
     this.setView = this.setView.bind(this);
     this.addToCart = this.addToCart.bind(this);
   }
+  // Define a method in the App component named placeOrder that takes an Object with name, creditCard, and shippingAddress properties and sends them in a POST request to "/api/orders" before resetting App's cart state to an empty Array. placeOrder should also change the App's view state back to { name: 'catalog', params: {} }
+
+  placeOrder(order) {
+    let order = {
+      name:order.name,
+      creditCard: order.creditCard,
+      shippingAddress: order.shippingAddress
+    }
+fetch('api/orders', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(order)
+  })
+    .then(response => ) {
+      response.json();
+      if(response.status === 200) {
+        this.setState({ statusMessage: 'Order added '});
+        this.setState({ cart: [] });
+        // might need to setSet to view and the 2 properties instead of this VV
+        this.setView('catalog', {});
+      }
+      if(response.status === 400) {
+        console.error("There is something wrong with your place order request");
+        console.log("There is a 404 error from the place order fetch request");
+      }
+    }
+  }
 
   getCartItems() {
     fetch('/api/cart')
