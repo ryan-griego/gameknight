@@ -33,7 +33,7 @@ export default class CartSummary extends React.Component {
 
                 {this.props.cart.map(cartItem => {
                   return <CartSummaryItem
-                    key={cartItem.productId}
+                    key={cartItem.cartItemId}
                     cartItem={cartItem}
                     image={cartItem.image}
                     productId={cartItem.productId}

@@ -6,28 +6,21 @@ export default class CheckoutForm extends React.Component {
     super(props);
     this.state = {
       name: '',
-      creditCard: null,
-      shippingAddress: ''
+      number: '',
+      address: ''
     };
     this.setView = this.setView.bind(this);
-    this.handleChangeName = this.handleChangeName.bind(this);
-    this.handleChangeCC = this.handleChangeCC.bind(this);
-    this.handleChangeAddress = this.handleChangeAddress.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-
   }
 
-  handleChangeName(event) {
-    this.setState({ name: event.target.value });
-  }
+  handleChange(event) {
+    const name = event.target.name;
+    const value = event.target.value;
 
-  handleChangeCC(event) {
-    this.setState({ creditCard: event.target.value });
-
-  }
-
-  handleChangeAddress(event) {
-    this.setState({ shippingAddress: event.target.value });
+    this.setState({
+      [name]: value
+    });
   }
 
   handleSubmit(event) {
@@ -36,8 +29,8 @@ export default class CheckoutForm extends React.Component {
 
     const order = {
       name: this.state.name,
-      creditCard: this.state.creditCard,
-      shippingAddress: this.state.shippingAddress
+      number: this.state.number,
+      address: this.state.address
     };
     this.props.order(order);
   }
@@ -58,16 +51,16 @@ export default class CheckoutForm extends React.Component {
           <form onSubmit={this.handleSubmit}>
             <div className="form-group">
               <label htmlFor="name">Name</label>
-              <input type="name" className="form-control" id="name" value={this.state.name} onChange={this.handleChangeName}/>
+              <input type="text" name="name" className="form-control" id="name" value={this.state.name} onChange={this.handleChange} />
             </div>
 
             <div className="form-group">
               <label htmlFor="cc">Credit Card Number:</label>
-              <input type="number" className="form-control" id="cc" value={this.state.creditCard} onChange={this.handleChangeCC}/>
+              <input type="text" name="number" className="form-control" id="number" value={this.state.creditCard} onChange={this.handleChange} />
             </div>
             <div className="form-group">
               <label htmlFor="address">Address</label>
-              <textarea className="form-control" id="address" rows="3" value={this.state.shippingAddress} onChange={this.handleChangeAddress}></textarea>
+              <textarea name="address" className="form-control" id="address" rows="3" value={this.state.shippingAddress} onChange={this.handleChange}></textarea>
             </div>
             <div className="float-left hover text-muted my-3 px-0 btn d-flex justify-content-start" onClick={this.setView} style={{ cursor: 'pointer' }}>&lt; Back to catalog</div>
 
