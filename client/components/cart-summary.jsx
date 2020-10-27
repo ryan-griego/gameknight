@@ -1,15 +1,20 @@
 import React from 'react';
-import CartSummaryItem from './CartSummaryItem';
+import CartSummaryItem from './cart-summary-item';
 
 export default class CartSummary extends React.Component {
 
   constructor(props) {
     super(props);
     this.setView = this.setView.bind(this);
+    this.setViewCheckout = this.setViewCheckout.bind(this);
   }
 
   setView(e) {
     this.props.view('catalog', {});
+  }
+
+  setViewCheckout(e) {
+    this.props.view('checkout', {});
   }
 
   render() {
@@ -39,7 +44,9 @@ export default class CartSummary extends React.Component {
 
               </div>
             </div>
-            <h4 className="mt-5">{cartCheck}</h4>
+            <h4 className="mt-5 float-left">{cartCheck}</h4>
+            <button type="button" className="float-right btn btn-primary" onClick={this.setViewCheckout} style={{ cursor: 'pointer' }}>Checkout</button>
+
           </div>
         </div>
       </>

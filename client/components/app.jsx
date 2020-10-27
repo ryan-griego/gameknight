@@ -2,7 +2,8 @@ import React from 'react';
 import Header from './header';
 import ProductList from './product-list';
 import ProductDetails from './product-details';
-import CartSummary from './CartSummary';
+import CartSummary from './cart-summary';
+import CheckoutForm from './checkout-form';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -12,21 +13,29 @@ export default class App extends React.Component {
       isLoading: true,
       cart: [],
       view: {
-        name: 'catalog',
+        name: 'checkout',
         params: {}
       }
     };
     this.setView = this.setView.bind(this);
     this.addToCart = this.addToCart.bind(this);
+    this.placeOrder = this.placeOrder.bind(this);
+
   }
   // Define a method in the App component named placeOrder that takes an Object with name, creditCard, and shippingAddress properties and sends them in a POST request to "/api/orders" before resetting App's cart state to an empty Array. placeOrder should also change the App's view state back to { name: 'catalog', params: {} }
 
   placeOrder(order) {
-    let order = {
-      name:order.name,
-      creditCard: order.creditCard,
-      shippingAddress: order.shippingAddress
-    }
+    event.preventDefault();
+    console.log("log the order in placeOrder", order);
+
+    console.log("log the event in placeOrder", event);
+    console.log("log the event.target in placeOrder", event.target);
+
+    // let order = {
+    //   name:pleacedOrder.name,
+    //   creditCard: pleacedOrder.creditCard,
+    //   shippingAddress: pleacedOrder.shippingAddress
+    // }
 fetch('api/orders', {
     method: 'POST',
     headers: {
@@ -34,20 +43,27 @@ fetch('api/orders', {
     },
     body: JSON.stringify(order)
   })
-    .then(response => ) {
-      response.json();
-      if(response.status === 200) {
+    .then(response =>  {
+      if(response.status === 201) {
+        console.log("log the response in placeOrder", response.status);
         this.setState({ statusMessage: 'Order added '});
         this.setState({ cart: [] });
         // might need to setSet to view and the 2 properties instead of this VV
         this.setView('catalog', {});
+        response.json();
+
       }
       if(response.status === 400) {
         console.error("There is something wrong with your place order request");
         console.log("There is a 404 error from the place order fetch request");
       }
-    }
+    })
+      .catch(error => {
+        console.error('Error:', error);
+        console.log('There was an error checking out', error);
+      });
   }
+
 
   getCartItems() {
     fetch('/api/cart')
@@ -132,6 +148,19 @@ fetch('api/orders', {
             cart={this.state.cart}
             viewParams={this.state.view.params}
             totalCost={totalPrice}/>
+        </div>
+      );
+    } else if (viewType === 'checkout') {
+      return (
+        <div>
+          <Header
+            cartItemCount={this.state.cart.length}
+            view={this.setView} />
+          <CheckoutForm
+            order={this.placeOrder}
+            view={this.setView}
+            totalCost={totalPrice}
+         />
         </div>
       );
     }
