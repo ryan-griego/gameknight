@@ -62,9 +62,19 @@ export default class CheckoutForm extends React.Component {
               <label htmlFor="address">Address</label>
               <textarea name="address" className="form-control" id="address" rows="3" value={this.state.shippingAddress} onChange={this.handleChange}></textarea>
             </div>
+            <div className="d-flex mt-4">
+              <input required className="mt-1" type="checkbox" id="iAgreeCheckOut" name="iAgreeCheckOut" />
+              <label className="m-0 ml-2" htmlFor="iAgreeCheckOut">
+                I accept that this website is for demonstration purposes, that
+                no payment processing will be done, and that personal information
+                such as names, addresses, or real credit card numbers should not
+                be used on submission of this form.
+              </label>
+            </div>
             <div className="float-left hover text-muted my-3 px-0 btn d-flex justify-content-start" onClick={this.setView} style={{ cursor: 'pointer' }}>&lt; Back to catalog</div>
 
             <button type="submit" className="btn btn-primary float-right">Place Order</button>
+
           </form>
 
         </div>
