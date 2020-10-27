@@ -13,7 +13,7 @@ export default class App extends React.Component {
       isLoading: true,
       cart: [],
       view: {
-        name: 'checkout',
+        name: 'catalog',
         params: {}
       }
     };
@@ -26,44 +26,30 @@ export default class App extends React.Component {
 
   placeOrder(order) {
     event.preventDefault();
-    console.log("log the order in placeOrder", order);
 
-    console.log("log the event in placeOrder", event);
-    console.log("log the event.target in placeOrder", event.target);
-
-    // let order = {
-    //   name:pleacedOrder.name,
-    //   creditCard: pleacedOrder.creditCard,
-    //   shippingAddress: pleacedOrder.shippingAddress
-    // }
-fetch('api/orders', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(order)
-  })
-    .then(response =>  {
-      if(response.status === 201) {
-        console.log("log the response in placeOrder", response.status);
-        this.setState({ statusMessage: 'Order added '});
-        this.setState({ cart: [] });
-        // might need to setSet to view and the 2 properties instead of this VV
-        this.setView('catalog', {});
-        response.json();
-
-      }
-      if(response.status === 400) {
-        console.error("There is something wrong with your place order request");
-        console.log("There is a 404 error from the place order fetch request");
-      }
+    fetch('api/orders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(order)
     })
+      .then(response => {
+        if (response.status === 201) {
+          this.setState({ statusMessage: 'Order added ' });
+          this.setState({ cart: [] });
+          this.setView('catalog', {});
+          response.json();
+
+        }
+        if (response.status === 400) {
+          console.error('There is something wrong with your place order request');
+        }
+      })
       .catch(error => {
         console.error('Error:', error);
-        console.log('There was an error checking out', error);
       });
   }
-
 
   getCartItems() {
     fetch('/api/cart')
@@ -160,7 +146,7 @@ fetch('api/orders', {
             order={this.placeOrder}
             view={this.setView}
             totalCost={totalPrice}
-         />
+          />
         </div>
       );
     }
