@@ -97,7 +97,6 @@ app.post('/api/cart', (req, res, next) => {
       if (!result.rows[0]) {
         throw new ClientError(`productId ${productId} does not exist`, 400);
       } else if ('cartId' in req.session) {
-        console.log('console log req.session.cartId', req.session.cartId);
 
         return {
           price: result.rows[0].price,
@@ -115,8 +114,6 @@ app.post('/api/cart', (req, res, next) => {
       }));
     })
     .then(data => {
-      // req.session.cartId is going through
-      console.log('log the data right before running additemtocart query', data);
       req.session.cartId = data.cartId;
       const price = data.price;
       const addItemToCart = `
@@ -128,8 +125,6 @@ app.post('/api/cart', (req, res, next) => {
       return db.query(addItemToCart, values).then(cartItemId => cartItemId.rows[0]);
     })
     .then(cartItemId => {
-      // the cartItemId is being passed through successful
-      console.log('log the cartItemId after running additemtocart query', cartItemId);
 
       const selectAllCartItems = `
   SELECT "c"."cartItemId",
@@ -145,47 +140,34 @@ app.post('/api/cart', (req, res, next) => {
       const value = [cartItemId.cartItemId];
       return db.query(selectAllCartItems, value)
         .then(data => {
-          console.log('lg the data returned from the selectAllCartItems query', data.rows[0]);
-          console.log('also log the req.session.cartId', req.session.cartId);
           res.status(201).json(data.rows);
         });
     })
     .catch(err => next(err));
 });
 
-// TO DO:
-// Add an endpoint to your Express.js server to handle POST requests to / api / orders.The endpoint should:
-// Verify that there is a cartId on req.session or respond with a 400 error with a helpful message.
-// Verify that the req.body contains a name, creditCard, and shippingAddress.
-// Insert the cartId, name, creditCard, and shippingAddress into the orders table.
-// delete the cartId from req.session if the insert succeeded.
-// Respond with a 201 status and a JSON body including the orderId, createdAt, name, creditCard, and shippingAddress of the placed order.
-
 // Add /api/orders POST request here
 
 app.post('/api/orders', (req, res, next) => {
-  console.log('Log the req.session.cartId', req.session.cartId);
   if (!req.session.cartId) {
     return res.status(400).json({
       error: 'There is no cartId in req.session'
     });
   }
 
-  const { name, creditCard, shippingAddress } = req.body;
+  const { name, number, address } = req.body;
 
-  if (!name || !creditCard || !shippingAddress) {
+  if (!name || !number || !address) {
     return res.status(400).json({
       error: 'The request needs to contain a name, credit card number and shipping address.'
     });
   }
-  // for some reason the other code doesn't have the orderId or created At in there
   const addNewOrder = `
     INSERT INTO "orders" ("orderId", "cartId", "name", "creditCard", "shippingAddress", "createdAt")
     VALUES (default, $1, $2, $3, $4, default)
     RETURNING *;
   `;
-  console.log('log the req.session.cartId inside the /orders post request', req.session.cartId);
-  const values = [req.session.cartId, name, creditCard, shippingAddress];
+  const values = [req.session.cartId, name, number, address];
 
   db.query(addNewOrder, values)
     .then(result => {

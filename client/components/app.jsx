@@ -12,6 +12,8 @@ export default class App extends React.Component {
       message: null,
       isLoading: true,
       cart: [],
+      hide: '',
+      showModal: '',
       view: {
         name: 'catalog',
         params: {}
@@ -20,9 +22,23 @@ export default class App extends React.Component {
     this.setView = this.setView.bind(this);
     this.addToCart = this.addToCart.bind(this);
     this.placeOrder = this.placeOrder.bind(this);
+    this.handleCloseOpeningModal = this.handleCloseOpeningModal.bind(this);
 
   }
-  // Define a method in the App component named placeOrder that takes an Object with name, creditCard, and shippingAddress properties and sends them in a POST request to "/api/orders" before resetting App's cart state to an empty Array. placeOrder should also change the App's view state back to { name: 'catalog', params: {} }
+
+  handleCloseOpeningModal(event) {
+    event.preventDefault();
+    this.setState({
+      fadeOut: 'fade-out'
+    });
+    setTimeout(() => {
+      this.setState({
+        showModal: 'display-none'
+      });
+    }
+    , 1000);
+
+  }
 
   placeOrder(order) {
     event.preventDefault();
@@ -86,6 +102,7 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
+    this.setState({ showModal: '' });
     this.getCartItems();
     fetch('/api/health-check')
       .then(res => res.json())
@@ -105,7 +122,10 @@ export default class App extends React.Component {
           <Header
             cartItemCount={this.state.cart.length}
             view={this.setView}/>
-          <ProductList view={this.setView} />
+          <ProductList view={this.setView}
+            showModal={this.state.showModal}
+            fadeOut={this.state.fadeOut}
+            closeModal={this.handleCloseOpeningModal}/>
         </div>
       );
     } else if (viewType === 'details') {
