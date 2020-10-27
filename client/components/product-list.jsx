@@ -31,7 +31,7 @@ export default class ProductList extends React.Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="container" className="container d-flex flex-wrap justify-content-between mt-5 mb-5 fade-in">
         <div className={`${this.props.showModal} `}>
           <div className={`opening-modal d-flex justify-content-center align-items-center ${this.props.fadeOut} `}>
             <div className="modal-dialog fade-in">
@@ -64,8 +64,6 @@ export default class ProductList extends React.Component {
             </div>
           </div>
         </div>
-        <div className="row row-cols-1 row-cols-md-2 mt-5">
-          <div className="card-deck">
             {
               this.state.products.map(product => {
                 return <ProductListItem
@@ -77,8 +75,6 @@ export default class ProductList extends React.Component {
                   view={this.setView}/>;
               })
             }
-          </div>
-        </div>
       </div>
     );
   }

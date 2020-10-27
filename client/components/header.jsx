@@ -17,8 +17,10 @@ export default class Header extends React.Component {
       <header>
         <nav className="navbar navbar-dark bg-dark">
           <div className="container">
-            <i className="fas fa-dollar-sign"><h1>Wicked Sales</h1></i>
-            <p onClick={this.setView} style={{ cursor: 'pointer' }}>{this.props.cartItemCount}{' ' + itemCheck}<i className="fas fa-shopping-cart"></i></p>
+            <h6 className="m-0">
+              <i className="fas fa-dollar-sign pr-2">Wicked Sales</i>
+            </h6>
+            <p className="m-0" onClick={this.setView} style={{ cursor: 'pointer' }}>{this.props.cartItemCount}{' ' + itemCheck}<i className="fas fa-shopping-cart mr-3 ml-2"></i></p>
           </div>
         </nav>
       </header>
