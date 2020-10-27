@@ -2,7 +2,8 @@ import React from 'react';
 import Header from './header';
 import ProductList from './product-list';
 import ProductDetails from './product-details';
-import CartSummary from './CartSummary';
+import CartSummary from './cart-summary';
+import CheckoutForm from './checkout-form';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -18,6 +19,36 @@ export default class App extends React.Component {
     };
     this.setView = this.setView.bind(this);
     this.addToCart = this.addToCart.bind(this);
+    this.placeOrder = this.placeOrder.bind(this);
+
+  }
+  // Define a method in the App component named placeOrder that takes an Object with name, creditCard, and shippingAddress properties and sends them in a POST request to "/api/orders" before resetting App's cart state to an empty Array. placeOrder should also change the App's view state back to { name: 'catalog', params: {} }
+
+  placeOrder(order) {
+    event.preventDefault();
+
+    fetch('api/orders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(order)
+    })
+      .then(response => {
+        if (response.status === 201) {
+          this.setState({ statusMessage: 'Order added ' });
+          this.setState({ cart: [] });
+          this.setView('catalog', {});
+          response.json();
+
+        }
+        if (response.status === 400) {
+          console.error('There is something wrong with your place order request');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
   }
 
   getCartItems() {
@@ -103,6 +134,19 @@ export default class App extends React.Component {
             cart={this.state.cart}
             viewParams={this.state.view.params}
             totalCost={totalPrice}/>
+        </div>
+      );
+    } else if (viewType === 'checkout') {
+      return (
+        <div>
+          <Header
+            cartItemCount={this.state.cart.length}
+            view={this.setView} />
+          <CheckoutForm
+            order={this.placeOrder}
+            view={this.setView}
+            totalCost={totalPrice}
+          />
         </div>
       );
     }
