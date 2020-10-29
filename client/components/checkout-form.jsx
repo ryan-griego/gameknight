@@ -71,7 +71,7 @@ export default class CheckoutForm extends React.Component {
                 be used on submission of this form.
               </label>
             </div>
-            <div className="float-left hover text-muted my-3 px-0 btn d-flex justify-content-start" onClick={this.setView} style={{ cursor: 'pointer' }}>&lt; Back to catalog</div>
+            <p className="pointer col-sm-3 pt-3 pl-0 pr-0" style={{ cursor: 'pointer' }} onClick={this.setView}><i className="fas fa-chevron-circle-left"></i> Back to catalog</p>
 
             <button type="submit" className="btn btn-primary float-right">Place Order</button>
 

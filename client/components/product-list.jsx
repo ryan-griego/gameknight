@@ -37,7 +37,7 @@ export default class ProductList extends React.Component {
             <div className="modal-dialog fade-in">
               <div className="modal-content slide-in">
                 <div className="modal-header header d-flex justify-content-center">
-                  <h4 className="text-center m-0 p-0" >Welcome to Space Badges!</h4>
+                  <h4 className="text-center m-0 p-0" >Welcome to GameKnight!</h4>
                 </div>
                 <div className="modal-body ">
                   <p className="px-3">
@@ -64,17 +64,17 @@ export default class ProductList extends React.Component {
             </div>
           </div>
         </div>
-            {
-              this.state.products.map(product => {
-                return <ProductListItem
-                  key={product.productId}
-                  product={product}
-                  name={product.name}
-                  productId={product.productId}
-                  price={product.price}
-                  view={this.setView}/>;
-              })
-            }
+        {
+          this.state.products.map(product => {
+            return <ProductListItem
+              key={product.productId}
+              product={product}
+              name={product.name}
+              productId={product.productId}
+              price={product.price}
+              view={this.setView}/>;
+          })
+        }
       </div>
     );
   }
