@@ -4,6 +4,7 @@ import ProductList from './product-list';
 import ProductDetails from './product-details';
 import CartSummary from './cart-summary';
 import CheckoutForm from './checkout-form';
+import Notice from './notice';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -15,6 +16,7 @@ export default class App extends React.Component {
       cart: [],
       cartQuantity: [],
       hide: '',
+      notice: 'display-none',
       showModal: '',
       view: {
         name: 'catalog',
@@ -91,7 +93,6 @@ export default class App extends React.Component {
         .then(res => res.json())
     ])
       .then(data => {
-        console.log('log the data coming from getCartItems', data);
 
         this.setState({
           cart: data[0],
@@ -102,12 +103,14 @@ export default class App extends React.Component {
   }
 
   addToCart(product, quantity) {
-    console.log('log the product being passed into addToCart', product);
-    console.log('log the quantity being passed into addToCart', quantity);
-    console.log('log this.state.cart in app.jsx', this.state.cart);
-    this.setState({ product: product });
-    // product = this.state.view.params;
-    console.log('log the product added to cart', product);
+    this.setState({
+      product: product,
+      notice: 'notice-body-container col d-flex justify-content-center shadow'
+    });
+
+    setTimeout(() => {
+      this.setState({ notice: 'display-none' });
+    }, 3000);
 
     for (let i = 0; i < quantity; i++) {
 
@@ -227,6 +230,7 @@ export default class App extends React.Component {
   }
 
   render() {
+
     const viewType = this.state.view.name;
     const allPrices = this.state.cart.map(item => item.price);
     const totalPrice = allPrices.reduce((a, b) => a + b, 0);
@@ -237,10 +241,13 @@ export default class App extends React.Component {
           <Header
             cartItemCount={this.state.cart.length}
             view={this.setView} />
+          <Notice product={this.state.product} display={this.state.notice} view={this.setView} />
+
           <ProductList view={this.setView}
             showModal={this.state.showModal}
             fadeOut={this.state.fadeOut}
-            closeModal={this.handleCloseOpeningModal} />
+            closeModal={this.handleCloseOpeningModal}
+            add={this.addToCart} />
         </div>
       );
     } else if (viewType === 'details') {
@@ -249,6 +256,8 @@ export default class App extends React.Component {
           <Header
             cartItemCount={this.state.cart.length}
             view={this.setView} />
+          <Notice product={this.state.product} display={this.state.notice} />
+
           <ProductDetails
             view={this.setView}
             viewParams={this.state.view.params}

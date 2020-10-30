@@ -91,7 +91,10 @@ export default class ProductDetails extends React.Component {
         <div className="d-flex flex-wrap justify-content-between">
           <div className="card col-sm col-md-7 col-lg d-flex justify-content-around detail-image-display-container">
             <div className=" d-flex">
-              <img className="col-12 detail-image-display align-self-center" src={this.state.product.image} alt="" />
+              <img className="col-12 detail-image-display align-self-center" src={this.state.mainImage} alt="" />
+            </div>
+            <div>
+              <Carousel images={this.state.images} selectMainImage={this.handleClickSelectMainImage} />
             </div>
           </div>
           <div className="card col-sm col-md-5 col-lg-4 d-flex flex-wrap flex-column justify-content-center py-4 px-0">
@@ -106,10 +109,27 @@ export default class ProductDetails extends React.Component {
                   quantity={this.state.quantity} />
               </div>
 
-              <button className="btn px-2 mt-4 btn-primary"
+              <button className="btn px-2 mt-4 btn-primary blue-button"
                 onClick={this.handleClickAddToCart}>
                 Add to Cart
               </button>
+            </div>
+            <div className="mt-5 d-flex justify-content-around">
+              <div className="col-4 d-flex flex-wrap justify-content-center py-3">
+                <i className="fas fa-clock fa-2x mb-3 grey"></i>
+                <h4 className="col-12 p-0 text-center">{this.state.product.mins}</h4>
+                <p>Minutes</p>
+              </div>
+              <div className="col-4 d-flex flex-wrap justify-content-center py-3 border-left border-right">
+                <i className="fas fa-user-friends fa-2x mb-3 grey "></i>
+                <h4 className="col-12 p-0 text-center">{this.state.product.players}</h4>
+                <p>Players</p>
+              </div>
+              <div className="col-4 d-flex flex-wrap justify-content-center py-3">
+                <i className="fas fa-user-astronaut fa-2x mb-3 grey"></i>
+                <h4 className="col-12 p-0 text-center iphone-678-landscape">{this.state.product.ages}</h4>
+                <p>Ages</p>
+              </div>
             </div>
 
           </div>

@@ -44,10 +44,25 @@ export default class CartSummary extends React.Component {
     this.props.getCartItems();
   }
 
+  cartCheck() {
+    if (this.props.items.length <= 0) {
+      return (
+        <div className="card col-12 text-center text-muted pt-2 pb-2">
+          <h3 className="m-0">No items in cart</h3>
+        </div>
+      );
+    }
+  }
+
+  checkoutCheck() {
+    if (this.props.items.length > 0) {
+      return (
+        <button type="button" className="float-right btn btn-primary" onClick={this.setViewCheckout} style={{ cursor: 'pointer', height: '25%' }}>Checkout</button>
+      );
+    }
+  }
+
   render() {
-    const totalPrice = (this.props.totalCost / 100).toFixed(2);
-    const messageCheck = this.props.cartItemCount <= 0 ? 'There are no products in the cart.' : '';
-    const cartCheck = this.props.cartItemCount <= 0 ? '' : `Cart Total: $${totalPrice}`;
 
     return (
       <>
@@ -57,6 +72,7 @@ export default class CartSummary extends React.Component {
             <h1>My Cart</h1>
           </div>
           <div className="d-flex flex-wrap justify-content-between mt-5">
+            {this.cartCheck()}
             {this.props.items.map((product, index) => {
               console.log('log the mapped items in cart', product);
               return <CartSummaryItem
@@ -73,7 +89,7 @@ export default class CartSummary extends React.Component {
           </div>
           <div className="d-flex flex-nowrap justify-content-between">
             <h3 className="mb-5">Cart Total: {this.getTotalPrice()}</h3>
-            <button type="button" className="float-right btn btn-primary" onClick={this.setViewCheckout} style={{ cursor: 'pointer', height: '25%' }}>Checkout</button>
+            {this.checkoutCheck()}
           </div>
         </div>
       </>

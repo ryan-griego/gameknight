@@ -26,7 +26,19 @@ export default class ProductList extends React.Component {
 
   setView(e) {
     const productId = e.currentTarget.getAttribute('id');
-    this.props.view('details', { productId });
+    console.log('log the  target of the addtocart button being clicked', e.target);
+    const findAddButton = e.target.className === 'btn col-12 px-2 blue-button first-add';
+    console.log('log the result of findAddButton', findAddButton);
+
+    // Checks to see if the clicked item is the add to cart button on the catalog page, if it is, it stays on catalog view
+    if (findAddButton) {
+      e.preventDefault();
+      this.props.view('catalog', { });
+
+    } else {
+      this.props.view('details', { productId });
+    }
+
   }
 
   render() {
@@ -72,7 +84,8 @@ export default class ProductList extends React.Component {
               name={product.name}
               productId={product.productId}
               price={product.price}
-              view={this.setView}/>;
+              view={this.setView}
+              add={this.props.add}/>;
           })
         }
       </div>
