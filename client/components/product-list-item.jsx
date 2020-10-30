@@ -6,16 +6,11 @@ export default class ProductListItem extends React.Component {
     this.state = {
       product: null
     };
-
     this.handleClickAddToCart = this.handleClickAddToCart.bind(this);
-
   }
 
   handleClickAddToCart() {
-    console.log('log this', this);
-
     this.props.add(this.props.product, 1);
-
   }
 
   render() {

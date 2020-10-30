@@ -53,7 +53,6 @@ export default class CartSummaryItem extends React.Component {
   }
 
   componentDidMount() {
-    console.log('log this.props in componentDidMount', this.props);
     fetch(`/api/products/${this.props.product.productId}`)
       .then(res => res.json())
       .then(data => {
@@ -63,15 +62,6 @@ export default class CartSummaryItem extends React.Component {
   }
 
   render() {
-    console.log('log this.props in render in cart-summary', this.props);
-    console.log('log this.props.quantities in render in cart-summary', this.props.quantities);
-    console.log('log this.props.product in render in cart-summary', this.props.product);
-    console.log('log this.props.cartItems in render in cart-summary', this.props.cartItems);
-
-    console.log('log this.props.product in render in cart-summary', this.props.product);
-    console.log('log this.props.product.count in render in cart-summary', this.props.product.count);
-
-    const price = (this.props.product.price / 100).toFixed(2);
     return <>
       <div className="card mb-5">
         <div className="row no-gutters p-2 pt-3  d-flex justify-content-around shadow-sm align-items-center">

@@ -38,8 +38,6 @@ app.get('/api/products/:productId', (req, res, next) => {
   `;
   const productId = parseInt(req.params.productId);
   const params = [productId];
-  console.log('tell me the productId passed into the get request', productId);
-  console.log('tell me the req.params.productId passed into the get request', req.params.productId);
 
   db.query(viewSingleProduct, params)
     .then(result => {
@@ -153,15 +151,15 @@ app.post('/api/cart', (req, res, next) => {
 
 app.get('/api/cart/quantity', (req, res, next) => {
   const getCartQuantity = `
-      select  "p"."productId",
+      SELECT  "p"."productId",
               "p"."name",
               "p"."price",
               "p"."image",
               count("p"."productId")
-        from  "products" as "p"
-        join  "cartItems" as "c" using ("productId")
-       where  "c"."cartId" = $1
-    group by  "p"."productId"
+        FROM  "products" as "p"
+        JOIN  "cartItems" as "c" using ("productId")
+       WHERE  "c"."cartId" = $1
+    GROUP BY  "p"."productId"
   `;
   const cartId = [req.session.cartId];
   db.query(getCartQuantity, cartId)
@@ -181,10 +179,10 @@ app.delete('/api/cart/:productId', (req, res, next) => {
     });
   }
   const sql = `
-    delete from "cartItems"
-        where "cartId" = $1
+    DELETE FROM "cartItems"
+        WHERE "cartId" = $1
           AND "productId" = $2
-    returning *
+    RETURNING *
     `;
   const value = [req.session.cartId, productId];
   db.query(sql, value)
@@ -208,10 +206,10 @@ app.delete('/api/cartItem/:cartItemId', (req, res, next) => {
     });
   }
   const sql = `
-    delete from "cartItems"
-        where "cartId" = $1
+    DELETE FROM "cartItems"
+        WHERE "cartId" = $1
           AND "cartItemId" = $2
-    returning *
+    RETURNING *
     `;
   const value = [req.session.cartId, cartItemId];
   db.query(sql, value)
@@ -226,10 +224,6 @@ app.delete('/api/cartItem/:cartItemId', (req, res, next) => {
     })
     .catch(err => next(err));
 });
-
-// End add 2 DELETE requests
-
-// Add /api/orders POST request here
 
 app.post('/api/orders', (req, res, next) => {
   if (!req.session.cartId) {
@@ -258,10 +252,7 @@ app.post('/api/orders', (req, res, next) => {
       res.status(201).json(result.rows[0]);
     })
     .catch(err => next(err));
-
 });
-
-// End POST request here
 
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));

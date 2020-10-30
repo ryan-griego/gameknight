@@ -10,9 +10,7 @@ export default class CartSummary extends React.Component {
   }
 
   getTotalPrice() {
-    console.log('get the this.props in getTotalPrice', this.props);
     const items = this.props.items;
-    console.log('log the this.props.quantities in getTotalPrice', items);
     let convertedTotal = '$';
     if (items.length === 0) {
       convertedTotal = '$0.00';
@@ -74,7 +72,6 @@ export default class CartSummary extends React.Component {
           <div className="d-flex flex-wrap justify-content-between mt-5">
             {this.cartCheck()}
             {this.props.items.map((product, index) => {
-              console.log('log the mapped items in cart', product);
               return <CartSummaryItem
                 key={index}
                 product={product}

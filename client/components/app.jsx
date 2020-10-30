@@ -44,7 +44,6 @@ export default class App extends React.Component {
       });
     }
     , 1000);
-
   }
 
   placeOrder(order) {
@@ -62,7 +61,6 @@ export default class App extends React.Component {
           this.setState({ statusMessage: 'Order added ' });
           this.setState({ cart: [] });
           this.setState({ cartQuantity: [] });
-
           this.setView('catalog', {});
           response.json();
 
@@ -76,15 +74,6 @@ export default class App extends React.Component {
       });
   }
 
-  // getCartItems() {
-  //   fetch('/api/cart')
-  //     .then(response => response.json())
-  //     .then(data => this.setState({ cart: data }))
-  //     .catch(error => {
-  //       console.error('There was a problem with your fetch operation in getCartItems: ', error);
-  //     });
-  // }
-
   getCartItems() {
     Promise.all([
       fetch('/api/cart')
@@ -93,7 +82,6 @@ export default class App extends React.Component {
         .then(res => res.json())
     ])
       .then(data => {
-
         this.setState({
           cart: data[0],
           cartQuantity: data[1]
@@ -113,7 +101,6 @@ export default class App extends React.Component {
     }, 3000);
 
     for (let i = 0; i < quantity; i++) {
-
       fetch('/api/cart', {
         method: 'POST',
         headers: {
@@ -123,11 +110,9 @@ export default class App extends React.Component {
       })
         .then(response => response.json())
         .then(newItem => {
-          console.log('log the newItem in addToCart', newItem);
           const currentCart = this.state.cart.slice();
           const newCart = currentCart.concat(newItem);
           this.setState({ cart: newCart });
-
         })
         .catch(error => {
           console.error('Error:', error);
@@ -167,7 +152,6 @@ export default class App extends React.Component {
   }
 
   handleClickDecreaseQuantity(productId) {
-    console.log('log the productId being passed into handleClickDecreaseQuantity', productId);
     for (let i = 0; i < this.state.cartQuantity.length; i++) {
       if (productId === this.state.cartQuantity[i].productId) {
         const quantity = parseInt(this.state.cartQuantity[i].count) - 1;

@@ -77,7 +77,6 @@ export default class ProductDetails extends React.Component {
   }
 
   setView(e) {
-    console.log('log this.state.product in product-details', this.state.product);
     this.props.view('catalog', {});
   }
 

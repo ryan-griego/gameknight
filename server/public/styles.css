@@ -17,13 +17,15 @@ nav {
 }
 
 .header {
-    background-color: rgba(5, 19, 54, .8);
+    background-color: rgba(79, 105, 162, 1);
     color: white;
 }
 
 .bg-knight {
-  background-color: rgba(5, 19, 54, .8)
+    background-color: rgba(79, 105, 162, 1);
 }
+
+
 
 
 
@@ -44,9 +46,23 @@ nav {
 
 }
 
+.btn-lt-blue {
+    color: #fff;
+    background-color: rgba(79, 105, 162, 1);
+    border-color: rgba(79, 105, 162, 1);
+
+}
+
+.btn-dk-blue {
+    color: #fff;
+    background-color: rgba(79, 105, 162, 1);
+    border-color: rgba(79, 105, 162, 1);
+
+}
+
 .blue-button {
   width: 100%;
-  background-color: rgba(5, 19, 54, .8);
+  background-color: rgba(79, 105, 162, 1);
   color: white;
   border-radius: 3px;
   padding: 15px 0;
@@ -54,8 +70,8 @@ nav {
 
 .blue-button:hover {
   width: 100%;
-  background-color: white;
-  color: black;
+  background-color:white;
+  color: rgba(79, 105, 162, 1);
   border-radius: 3px;
   border: 1px solid rgba(5, 19, 54, .8);
   padding: 15px 0;
@@ -91,7 +107,7 @@ nav {
 }
 
 .notice-body-container {
-  background-color: rgba(5, 19, 54, 1);
+  background-color: rgba(79, 105, 162, 1);
   height: 4vw;
 }
 
@@ -194,6 +210,11 @@ html {
 
 .cart-image {
   width: 100%;
+}
+
+.fa-trash-alt {
+color:  rgb(154, 31, 28) !important;
+
 }
 
 /* Carousel styling */
@@ -299,4 +320,100 @@ i {
 .item-card {
     width: 100%;
 }
+}
+
+/* ----------- iPhone 6, 6S, 7 and 8 ----------- */
+ /* Portrait */
+@media only screen
+  and (min-device-width: 375px)
+  and (max-device-width: 667px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: portrait) {
+  .item-card {
+    width: 100%;
+  }
+  .smaller-text {
+    font-size: .8rem;
+  }
+  .text-size-4 {
+    font-size: 2rem;
+  }
+  .detail-image-display-container {
+    margin-right: 0px;
+  }
+  .detail-image-display {
+    height: 200px;
+    object-fit: contain;
+  }
+  .thumbnail-container {
+    height: 50px;
+    background-color: white;
+  }
+  .notice-container {
+    position: fixed;
+    top: 0px;
+    z-index: 1;
+  }
+  .notice-body-container {
+    background-color: rgb(250, 171, 73);
+    height: 60px;
+  }
+
+}
+
+/* ----------- iPhone 6, 6S, 7 and 8 ----------- */
+/* Landscape */
+@media only screen
+  and (min-device-width: 375px)
+  and (max-device-width: 667px)
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (orientation: landscape) {
+  .item-card {
+    width: 100%;
+    padding-top: 10%;
+  }
+  .container {
+    max-width: 100%;
+    margin: auto;
+  }
+  h4.iphone-678-landscape {
+    font-size: 1.2rem;
+  }
+ .thumbnail-container {
+    height: 50px;
+    background-color: white;
+  }
+}
+
+/* ----------- iPhone X ----------- */
+/* Landscape */
+@media only screen
+  and (min-device-width: 375px)
+  and (max-device-width: 812px)
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: landscape) {
+  .item-card {
+    width: 45%;
+  }
+  .detail-image-display-container {
+    margin-right: 0px;
+  }
+  h4.iphone-678-landscape {
+    font-size: 1.2rem;
+  }
+}
+
+/* ----------- iPad 3, 4 and Pro 9.7" ----------- */
+/* Landscape */
+@media only screen
+  and (min-device-width: 768px)
+  and (max-device-width: 1024px)
+  and (orientation: landscape)
+  and (-webkit-min-device-pixel-ratio: 2) {
+    .item-card {
+    width: 45%;
+  }
+    h4.iphone-678-landscape {
+    font-size: 1.2rem;
+  }
 }
