@@ -21,7 +21,7 @@ app.get('/api/health-check', (req, res, next) => {
 
 app.get('/api/products', (req, res, next) => {
   const viewAllProducts = `
-   SELECT "productId", "name", "price", "image", "shortDescription"
+   SELECT *
      FROM "products"
   `;
   db.query(viewAllProducts)
@@ -38,6 +38,7 @@ app.get('/api/products/:productId', (req, res, next) => {
   `;
   const productId = parseInt(req.params.productId);
   const params = [productId];
+
   db.query(viewSingleProduct, params)
     .then(result => {
       if (!result.rows[0]) {
@@ -146,7 +147,83 @@ app.post('/api/cart', (req, res, next) => {
     .catch(err => next(err));
 });
 
-// Add /api/orders POST request here
+// Add GET request to get the cart quantity
+
+app.get('/api/cart/quantity', (req, res, next) => {
+  const getCartQuantity = `
+      SELECT  "p"."productId",
+              "p"."name",
+              "p"."price",
+              "p"."image",
+              count("p"."productId")
+        FROM  "products" as "p"
+        JOIN  "cartItems" as "c" using ("productId")
+       WHERE  "c"."cartId" = $1
+    GROUP BY  "p"."productId"
+  `;
+  const cartId = [req.session.cartId];
+  db.query(getCartQuantity, cartId)
+    .then(result => res.status(200).json(result.rows))
+    .catch(err => next(err));
+});
+
+// End GET request
+
+// Add 2 DELETE requests to handle delete product and delete cart item
+
+app.delete('/api/cart/:productId', (req, res, next) => {
+  const { productId } = req.params;
+  if (isNaN(productId)) {
+    return res.status(400).json({
+      error: 'Product Id must be a valid number'
+    });
+  }
+  const sql = `
+    DELETE FROM "cartItems"
+        WHERE "cartId" = $1
+          AND "productId" = $2
+    RETURNING *
+    `;
+  const value = [req.session.cartId, productId];
+  db.query(sql, value)
+    .then(result => {
+      if (!result.rows[0]) {
+        res.status(404).json({
+          error: 'Product Id does not exist.'
+        });
+      } else {
+        res.status(200).json(result.rows);
+      }
+    })
+    .catch(err => next(err));
+});
+
+app.delete('/api/cartItem/:cartItemId', (req, res, next) => {
+  const { cartItemId } = req.params;
+  if (isNaN(cartItemId)) {
+    return res.status(400).json({
+      error: 'Cart Item Id must be a valid number'
+    });
+  }
+  const sql = `
+    DELETE FROM "cartItems"
+        WHERE "cartId" = $1
+          AND "cartItemId" = $2
+    RETURNING *
+    `;
+  const value = [req.session.cartId, cartItemId];
+  db.query(sql, value)
+    .then(result => {
+      if (!result.rows[0]) {
+        res.status(404).json({
+          error: 'Cart Item Id does not exist.'
+        });
+      } else {
+        res.status(200).json(result.rows);
+      }
+    })
+    .catch(err => next(err));
+});
 
 app.post('/api/orders', (req, res, next) => {
   if (!req.session.cartId) {
@@ -175,10 +252,7 @@ app.post('/api/orders', (req, res, next) => {
       res.status(201).json(result.rows[0]);
     })
     .catch(err => next(err));
-
 });
-
-// End POST request here
 
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));

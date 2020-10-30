@@ -4,6 +4,7 @@ import ProductList from './product-list';
 import ProductDetails from './product-details';
 import CartSummary from './cart-summary';
 import CheckoutForm from './checkout-form';
+import Notice from './notice';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -11,8 +12,11 @@ export default class App extends React.Component {
     this.state = {
       message: null,
       isLoading: true,
+      product: {},
       cart: [],
+      cartQuantity: [],
       hide: '',
+      notice: 'display-none',
       showModal: '',
       view: {
         name: 'catalog',
@@ -20,10 +24,13 @@ export default class App extends React.Component {
       }
     };
     this.setView = this.setView.bind(this);
+    this.getCartItems = this.getCartItems.bind(this);
     this.addToCart = this.addToCart.bind(this);
     this.placeOrder = this.placeOrder.bind(this);
+    this.deleteItem = this.deleteItem.bind(this);
     this.handleCloseOpeningModal = this.handleCloseOpeningModal.bind(this);
-
+    this.handleClickIncreaseQuantity = this.handleClickIncreaseQuantity.bind(this);
+    this.handleClickDecreaseQuantity = this.handleClickDecreaseQuantity.bind(this);
   }
 
   handleCloseOpeningModal(event) {
@@ -37,7 +44,6 @@ export default class App extends React.Component {
       });
     }
     , 1000);
-
   }
 
   placeOrder(order) {
@@ -54,6 +60,7 @@ export default class App extends React.Component {
         if (response.status === 201) {
           this.setState({ statusMessage: 'Order added ' });
           this.setState({ cart: [] });
+          this.setState({ cartQuantity: [] });
           this.setView('catalog', {});
           response.json();
 
@@ -68,28 +75,123 @@ export default class App extends React.Component {
   }
 
   getCartItems() {
-    fetch('/api/cart')
-      .then(response => response.json())
-      .then(data => this.setState({ cart: data }))
-      .catch(error => {
-        console.error('There was a problem with your fetch operation in getCartItems: ', error);
-      });
+    Promise.all([
+      fetch('/api/cart')
+        .then(res => res.json()),
+      fetch('/api/cart/quantity')
+        .then(res => res.json())
+    ])
+      .then(data => {
+        this.setState({
+          cart: data[0],
+          cartQuantity: data[1]
+        });
+      })
+      .catch(err => console.error(err));
   }
 
-  addToCart(product) {
-    product = this.state.view.params;
-    fetch('/api/cart', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(product)
-    })
-      .then(response => response.json())
-      .then(() => this.getCartItems())
-      .catch(error => {
-        console.error('Error:', error);
-      });
+  addToCart(product, quantity) {
+    this.setState({
+      product: product,
+      notice: 'notice-body-container col d-flex justify-content-center shadow'
+    });
+
+    setTimeout(() => {
+      this.setState({ notice: 'display-none' });
+    }, 3000);
+
+    for (let i = 0; i < quantity; i++) {
+      fetch('/api/cart', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(product)
+      })
+        .then(response => response.json())
+        .then(newItem => {
+          const currentCart = this.state.cart.slice();
+          const newCart = currentCart.concat(newItem);
+          this.setState({ cart: newCart });
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+  }
+
+  deleteItem(productId) {
+    const remove = {
+      method: 'DELETE'
+    };
+    fetch(`/api/cart/${productId}`, remove)
+      .then(res => res.json())
+      .then(data => {
+        const currentCart = this.state.cart.slice();
+        const newCart = [];
+        while (currentCart.length > 0) {
+          if (data[0].productId === currentCart[0].productId) {
+            currentCart.splice(0, 1);
+          } else {
+            newCart.push(currentCart[0]);
+            currentCart.splice(0, 1);
+          }
+        }
+        const newQuantityArray = this.state.cartQuantity.slice();
+        for (let i = 0; i < newQuantityArray.length; i++) {
+          if (data[0].productId === newQuantityArray[i].productId) {
+            newQuantityArray.splice(i, 1);
+          }
+        }
+        this.setState({
+          cart: newCart,
+          cartQuantity: newQuantityArray
+        });
+      })
+      .catch(err => console.error(err));
+  }
+
+  handleClickDecreaseQuantity(productId) {
+    for (let i = 0; i < this.state.cartQuantity.length; i++) {
+      if (productId === this.state.cartQuantity[i].productId) {
+        const quantity = parseInt(this.state.cartQuantity[i].count) - 1;
+        const newCartQuantity = this.state.cartQuantity.slice();
+        newCartQuantity[i].count = quantity;
+        this.setState({ cartQuantity: newCartQuantity });
+        break;
+      }
+    }
+    for (let i = 0; i < this.state.cart.length; i++) {
+      if (productId === this.state.cart[i].productId) {
+        const cartItemId = this.state.cart[i].cartItemId;
+        const remove = {
+          method: 'DELETE'
+        };
+        fetch(`/api/cartItem/${cartItemId}`, remove)
+          .then(() => {
+            const newCart = this.state.cart.slice();
+            newCart.splice([i], 1);
+            this.setState({
+              cart: newCart
+            });
+          })
+          .catch(err => console.error(err));
+        break;
+      }
+    }
+  }
+
+  handleClickIncreaseQuantity(product) {
+    for (let i = 0; i < this.state.cartQuantity.length; i++) {
+      if (product.productId === this.state.cartQuantity[i].productId) {
+        const quantity = parseInt(this.state.cartQuantity[i].count) + 1;
+        const newCartQuantity = this.state.cartQuantity.slice();
+        newCartQuantity[i].count = quantity;
+        this.setState({ cartQuantity: newCartQuantity });
+        break;
+      }
+    }
+    this.addToCart(product, 1);
   }
 
   setView(name, params) {
@@ -112,6 +214,7 @@ export default class App extends React.Component {
   }
 
   render() {
+
     const viewType = this.state.view.name;
     const allPrices = this.state.cart.map(item => item.price);
     const totalPrice = allPrices.reduce((a, b) => a + b, 0);
@@ -121,11 +224,14 @@ export default class App extends React.Component {
         <div>
           <Header
             cartItemCount={this.state.cart.length}
-            view={this.setView}/>
+            view={this.setView} />
+          <Notice product={this.state.product} display={this.state.notice} view={this.setView} />
+
           <ProductList view={this.setView}
             showModal={this.state.showModal}
             fadeOut={this.state.fadeOut}
-            closeModal={this.handleCloseOpeningModal}/>
+            closeModal={this.handleCloseOpeningModal}
+            add={this.addToCart} />
         </div>
       );
     } else if (viewType === 'details') {
@@ -133,9 +239,10 @@ export default class App extends React.Component {
         <div>
           <Header
             cartItemCount={this.state.cart.length}
-            view={this.setView}/>
+            view={this.setView} />
+          <Notice product={this.state.product} display={this.state.notice} />
+
           <ProductDetails
-            product={this.props.product}
             view={this.setView}
             viewParams={this.state.view.params}
             add={this.addToCart} />
@@ -148,12 +255,16 @@ export default class App extends React.Component {
             cartItemCount={this.state.cart.length}
             view={this.setView} />
           <CartSummary
-            product={this.props.product}
-            cartItemCount={this.state.cart.length}
             view={this.setView}
-            cart={this.state.cart}
+            cartItems={this.state.cart}
+            items={this.state.cartQuantity}
             viewParams={this.state.view.params}
-            totalCost={totalPrice}/>
+            totalCost={totalPrice}
+            deleteItem={this.deleteItem}
+            getCartItems={this.getCartItems}
+            add={this.addToCart}
+            handleClickIncreaseQuantity={this.handleClickIncreaseQuantity}
+            handleClickDecreaseQuantity={this.handleClickDecreaseQuantity} />
         </div>
       );
     } else if (viewType === 'checkout') {
@@ -165,6 +276,7 @@ export default class App extends React.Component {
           <CheckoutForm
             order={this.placeOrder}
             view={this.setView}
+            cart={this.state.cart}
             totalCost={totalPrice}
           />
         </div>

@@ -26,18 +26,27 @@ export default class ProductList extends React.Component {
 
   setView(e) {
     const productId = e.currentTarget.getAttribute('id');
-    this.props.view('details', { productId });
+    const findAddButton = e.target.className === 'btn col-12 px-2 blue-button first-add';
+
+    if (findAddButton) {
+      e.preventDefault();
+      this.props.view('catalog', { });
+
+    } else {
+      this.props.view('details', { productId });
+    }
+
   }
 
   render() {
     return (
-      <div className="container" className="container d-flex flex-wrap justify-content-between mt-5 mb-5 fade-in">
+      <div className="container d-flex flex-wrap justify-content-between mt-5 mb-5 fade-in">
         <div className={`${this.props.showModal} `}>
           <div className={`opening-modal d-flex justify-content-center align-items-center ${this.props.fadeOut} `}>
             <div className="modal-dialog fade-in">
               <div className="modal-content slide-in">
                 <div className="modal-header header d-flex justify-content-center">
-                  <h4 className="text-center m-0 p-0" >Welcome to Space Badges!</h4>
+                  <h4 className="text-center m-0 p-0" >Welcome to GameKnight!</h4>
                 </div>
                 <div className="modal-body ">
                   <p className="px-3">
@@ -56,7 +65,7 @@ export default class ProductList extends React.Component {
                       <label className="m-0 ml-2" htmlFor="agreed"><input required className="mr-2" type="checkbox" id="acknowledge" name="agreed" />I acknowledge that this is strictly a demo application</label>
                     </div>
                     <div className="d-flex justify-content-center">
-                      <button type="submit" className="btn btn-primary mt-3" >Submit</button>
+                      <button type="submit" className="btn btn-dk-blue mt-3" >Submit</button>
                     </div>
                   </form>
                 </div>
@@ -64,17 +73,18 @@ export default class ProductList extends React.Component {
             </div>
           </div>
         </div>
-            {
-              this.state.products.map(product => {
-                return <ProductListItem
-                  key={product.productId}
-                  product={product}
-                  name={product.name}
-                  productId={product.productId}
-                  price={product.price}
-                  view={this.setView}/>;
-              })
-            }
+        {
+          this.state.products.map(product => {
+            return <ProductListItem
+              key={product.productId}
+              product={product}
+              name={product.name}
+              productId={product.productId}
+              price={product.price}
+              view={this.setView}
+              add={this.props.add}/>;
+          })
+        }
       </div>
     );
   }
