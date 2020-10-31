@@ -55,7 +55,7 @@ export default class CartSummary extends React.Component {
   checkoutCheck() {
     if (this.props.items.length > 0) {
       return (
-        <button type="button" className="float-right btn btn-primary" onClick={this.setViewCheckout} style={{ cursor: 'pointer', height: '25%' }}>Checkout</button>
+        <button type="button" className="float-right btn btn-dk-blue" onClick={this.setViewCheckout} style={{ cursor: 'pointer', height: '25%' }}>Checkout</button>
       );
     }
   }
