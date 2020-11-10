@@ -60,6 +60,14 @@ nav {
 
 }
 
+.btn-dk-blue:hover {
+  background-color:white;
+  color: rgba(79, 105, 162, 1);
+  border-radius: 3px;
+  border: 1px solid rgba(5, 19, 54, .8);
+
+}
+
 .blue-button {
   width: 100%;
   background-color: rgba(79, 105, 162, 1);
