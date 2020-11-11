@@ -19,8 +19,8 @@ Url coming soon
   - Node.js
   - Express
   - PostgreSQL
-  - express-session
-  - webpack
+  - Express-session
+  - Webpack
   - Babel
   - Bootstrap 4
 
