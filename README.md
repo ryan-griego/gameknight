@@ -21,7 +21,7 @@ Url coming soon
   - PostgreSQL
   - express-session
   - webpack
-  - babel
+  - Babel
   - Bootstrap 4
 
   ## Features
