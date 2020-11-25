@@ -19,9 +19,9 @@ Url coming soon
   - Node.js
   - Express
   - PostgreSQL
-  - express-session
-  - webpack
-  - babel
+  - Express-session
+  - Webpack
+  - Babel
   - Bootstrap 4
 
   ## Features
@@ -32,7 +32,7 @@ Url coming soon
  1. User can place an order.
 
  ## Preview
- <img src="server/public/images/GameKnight.png">
+ <img src="server/public/images/gameknight-animation.gif">
 
 ## Getting Started
 1. Install all dependencies `npm install`.
