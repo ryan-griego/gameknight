@@ -19,7 +19,7 @@ export default class ProductListItem extends React.Component {
 
     return <>
       <div className="card item-card shadow-sm mb-3 pb-3 pointer overflow-hidden" onClick={this.props.view} id={this.props.product.productId}>
-        <img src={image[0]} className="card-img-top pointer mt-4 grow"></img>
+        <img src={image[0]} className="card-img-top pointer mt-4"></img>
         <div className="card-body pointer d-flex flex-wrap">
           <h5 className="card-title">{this.props.product.name}</h5>
           <p className="text-muted pointer col-12 p-0">${price}</p>

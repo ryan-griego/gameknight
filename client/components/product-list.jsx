@@ -42,7 +42,7 @@ export default class ProductList extends React.Component {
     return (
       <div className="container d-flex flex-wrap justify-content-between mt-5 mb-5 fade-in">
         <div className={`${this.props.showModal} `}>
-          <div className={`opening-modal d-flex justify-content-center align-items-center ${this.props.fadeOut} `}>
+          <div className={`opening-modal a d-flex justify-content-center align-items-center ${this.props.fadeOut} `}>
             <div className="modal-dialog fade-in">
               <div className="modal-content slide-in">
                 <div className="modal-header header d-flex justify-content-center">
@@ -62,7 +62,13 @@ export default class ProductList extends React.Component {
                   <form action="submit" onSubmit={this.props.closeModal}>
                     <div className="d-flex container">
 
-                      <label className="m-0 ml-2" htmlFor="agreed"><input required className="mr-2" type="checkbox" id="acknowledge" name="agreed" />I acknowledge that this is strictly a demo application</label>
+                      {/* <label className="m-0 ml-2 custom-control-label" htmlFor="agreed"><input required className="mr-2 custom-control-input-green" type="checkbox" id="acknowledge" name="agreed" />I acknowledge that this is strictly a demo application</label> */}
+
+                      <div className="custom-control custom-checkbox custom-checkbox-blue" htmlFor="agreed">
+                        <input required type="checkbox" className="mr-2 custom-control-input custom-control-input-blue" id="acknowledge" name="agreed"/>
+                        <label className="m-0 ml-2 custom-control-label" htmlFor="acknowledge">I acknowledge that this is strictly a demo application</label>
+                      </div>
+
                     </div>
                     <div className="d-flex justify-content-center">
                       <button type="submit" className="btn btn-dk-blue mt-3" >Submit</button>

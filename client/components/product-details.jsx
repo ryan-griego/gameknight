@@ -89,8 +89,8 @@ export default class ProductDetails extends React.Component {
         </div>
         <div className="d-flex flex-wrap justify-content-between">
           <div className="card col-sm col-md-7 col-lg d-flex justify-content-around detail-image-display-container">
-            <div className=" d-flex">
-              <img className="col-12 detail-image-display align-self-center" src={this.state.mainImage} alt="" />
+            <div className=" d-flex fade-in">
+              <img className="col-12 detail-image-display align-self-center slide-in" src={this.state.mainImage} alt="" />
             </div>
             <div>
               <Carousel images={this.state.images} selectMainImage={this.handleClickSelectMainImage} />
