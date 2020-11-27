@@ -1,5 +1,6 @@
 import React from 'react';
 import Header from './header';
+import HeaderVideo from './header-video';
 import ProductList from './product-list';
 import ProductDetails from './product-details';
 import CartSummary from './cart-summary';
@@ -225,6 +226,7 @@ export default class App extends React.Component {
           <Header
             cartItemCount={this.state.cart.length}
             view={this.setView} />
+          <HeaderVideo fadeIn={this.state.fadeIn} />
           <Notice product={this.state.product} display={this.state.notice} view={this.setView} />
 
           <ProductList view={this.setView}
