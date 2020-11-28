@@ -45,17 +45,40 @@ nav {
     font-family: 'Permanent Marker', cursive;
 }
 
+.hero-text-sub-header {
+    color: white;
+    z-index: 0;
+    margin-top: -10px;
+    font-size: 1.7rem;
+}
+
 .hero-text {
     color: white;
     z-index: 0;
+    text-shadow: 0 0 3px rgb(31 58 118 / 82%);
 }
 
 .header-video {
   position: absolute;
+   background:
+    linear-gradient(
+      rgba(0, 0, 0, 0.6),
+      rgba(0, 0, 0, 0.6)
+    );
   top: 0px;
   left: 0;
   width: 100%;
   z-index: -1;
+}
+
+.video-overlay {
+  position: absolute;
+  top: 50px;
+  left: 0;
+  width: 100%;
+  height: 110%;
+  background-color: rgba(0,0,0,.2);
+  z-index: 0;
 }
 
 img.header-gif {
