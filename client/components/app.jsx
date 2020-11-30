@@ -6,6 +6,7 @@ import ProductDetails from './product-details';
 import CartSummary from './cart-summary';
 import CheckoutForm from './checkout-form';
 import Notice from './notice';
+import Footer from './footer';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -234,6 +235,7 @@ export default class App extends React.Component {
             fadeOut={this.state.fadeOut}
             closeModal={this.handleCloseOpeningModal}
             add={this.addToCart} />
+          <Footer/>
         </div>
       );
     } else if (viewType === 'details') {
@@ -248,6 +250,7 @@ export default class App extends React.Component {
             view={this.setView}
             viewParams={this.state.view.params}
             add={this.addToCart} />
+          <Footer />
         </div>
       );
     } else if (viewType === 'cart') {
@@ -281,6 +284,7 @@ export default class App extends React.Component {
             cart={this.state.cart}
             totalCost={totalPrice}
           />
+          <Footer />
         </div>
       );
     }

@@ -261,7 +261,7 @@ export default class CheckoutForm extends React.Component {
               </label>
             </div>
             <div className="d-flex flex-nowrap justify-content-between mt-4 align-items-center">
-              <p className="m-0 pointer smaller-text" onClick={this.handleClickBackToCatalog}><i className="fas fa-chevron-circle-left"></i> Continue Shopping</p>
+              <p className="m-0 pointer smaller-text" style={{ cursor: 'pointer' }} onClick={this.handleClickBackToCatalog}><i className="fas fa-chevron-circle-left"></i> Continue Shopping</p>
               <button
                 type="submit"
                 className="btn btn-dk-blue">

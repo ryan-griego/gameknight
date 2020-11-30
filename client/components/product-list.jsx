@@ -40,7 +40,7 @@ export default class ProductList extends React.Component {
 
   render() {
     return (
-      <div className="container d-flex flex-wrap justify-content-between mt-5 mb-5 fade-in">
+      <div className="container d-flex flex-wrap justify-content-between mt-5 mb-5 fade-in" id="top-products">
         <div className={`${this.props.showModal} `}>
           <div className={`opening-modal a d-flex justify-content-center align-items-center ${this.props.fadeOut} `}>
             <div className="modal-dialog fade-in">
