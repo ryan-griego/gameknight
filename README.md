@@ -9,7 +9,7 @@ A full stack Node.js and React shopping cart app.
 A full stack Node.js and React shopping cart app.
 
 ## Live Demo
-Url coming soon
+https://gameknight.ryangriego.com/
 
 ## Technologies Used
   - HTML
