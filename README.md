@@ -1,4 +1,4 @@
-# wicked-sales-js
+# gameknight
 A full stack Node.js and React shopping cart app.
 > - Maintained by: `ryan-griego`
 
