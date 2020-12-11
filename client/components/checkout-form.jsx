@@ -252,7 +252,7 @@ export default class CheckoutForm extends React.Component {
               </div>
             </div>
             <div className="d-flex mt-4">
-              <input required className="mt-1" type="checkbox" id="iAgreeCheckOut" name="iAgreeCheckOut" />
+              <input required className="mt-1 custom-control-input custom-control-input-blue" type="checkbox" id="iAgreeCheckOut" name="iAgreeCheckOut" />
               <label className="m-0 ml-2" htmlFor="iAgreeCheckOut">
                 I accept that this website is for demonstration purposes, that
                 no payment processing will be done, and that personal information
