@@ -140,7 +140,6 @@ video{
 }
 
 .item-card:hover {
-  width: 32%;
   background-color: white;
   transition: .3s all;
   transform: translateY(-3px);
@@ -460,6 +459,7 @@ i {
   font-size: 1rem;
 }
 }
+
 
 @media only screen and (-webkit-min-device-pixel-ratio: 2) and (max-device-width: 667px) and (min-device-width: 375px) and (orientation: portrait) {
 .item-card {
