@@ -45,7 +45,7 @@ export default class CartSummary extends React.Component {
   cartCheck() {
     if (this.props.items.length <= 0) {
       return (
-        <div className="card col-12 text-center text-muted pt-2 pb-2">
+        <div className="card col-12 text-center text-muted p-4">
           <h3 className="m-0">No items in cart</h3>
         </div>
       );
@@ -69,7 +69,7 @@ export default class CartSummary extends React.Component {
             <p className="pointer col-sm-3 pt-3 pl-0 pr-0" style={{ cursor: 'pointer' }} onClick={this.setView}><i className="fas fa-chevron-circle-left"></i> Back to catalog</p>
             <h1>My Cart</h1>
           </div>
-          <div className="d-flex flex-wrap justify-content-between mt-5">
+          <div className="d-flex flex-wrap justify-content-between mt-2">
             {this.cartCheck()}
             {this.props.items.map((product, index) => {
               return <CartSummaryItem
@@ -84,7 +84,7 @@ export default class CartSummary extends React.Component {
                 image={product.image}/>;
             })}
           </div>
-          <div className="d-flex flex-nowrap justify-content-between">
+          <div className="d-flex flex-nowrap justify-content-between mt-3">
             <h3 className="mb-5">Cart Total: {this.getTotalPrice()}</h3>
             {this.checkoutCheck()}
           </div>

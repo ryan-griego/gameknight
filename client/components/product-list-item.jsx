@@ -18,7 +18,7 @@ export default class ProductListItem extends React.Component {
     const price = (this.props.product.price / 100).toFixed(2);
 
     return <>
-      <div className="card item-card shadow-sm mb-3 pb-3 pointer overflow-hidden" onClick={this.props.view} id={this.props.product.productId}>
+      <div className="card item-card shadow-sm mb-3 pb-3 pointer overflow-hidden" onClick={this.props.view} id={this.props.product.productId} style={{ cursor: 'pointer' }}>
         <img src={image[0]} className="card-img-top pointer mt-4"></img>
         <div className="card-body pointer d-flex flex-wrap">
           <h5 className="card-title">{this.props.product.name}</h5>
