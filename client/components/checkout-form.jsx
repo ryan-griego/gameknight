@@ -251,14 +251,14 @@ export default class CheckoutForm extends React.Component {
                 </div>
               </div>
             </div>
-            <div className="d-flex mt-4">
-              <input required className="mt-1 custom-control-input custom-control-input-blue" type="checkbox" id="iAgreeCheckOut" name="iAgreeCheckOut" />
-              <label className="m-0 ml-2" htmlFor="iAgreeCheckOut">
-                I accept that this website is for demonstration purposes, that
+            <div className="d-flex container">
+              <div className="custom-control custom-checkbox custom-checkbox-blue" htmlFor="agreed">
+                <input required type="checkbox" className="mr-2 custom-control-input custom-control-input-blue" id="acknowledge" name="agreed" />
+                <label className="m-0 ml-2 custom-control-label" htmlFor="acknowledge">I accept that this website is for demonstration purposes, that
                 no payment processing will be done, and that personal information
                 such as names, addresses, or real credit card numbers should not
-                be used on submission of this form.
-              </label>
+                be used on submission of this form.</label>
+              </div>
             </div>
             <div className="d-flex flex-nowrap justify-content-between mt-4 align-items-center">
               <p className="m-0 pointer smaller-text" style={{ cursor: 'pointer' }} onClick={this.handleClickBackToCatalog}><i className="fas fa-chevron-circle-left"></i> Continue Shopping</p>
@@ -270,7 +270,6 @@ export default class CheckoutForm extends React.Component {
             </div>
           </form>
         </div>
-
       </div>
     );
   }
